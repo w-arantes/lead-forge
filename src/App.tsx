@@ -1,9 +1,9 @@
-import './App.css'
+import { Button } from "@/components/ui/button";
 
 export function App() {
   return (
-    <div>
-      Lead Forge
+    <div className="flex h-screen justify-center items-center">
+      <Button>Lead Forge</Button>
     </div>
   )
 }
