@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Kbd } from "@/components/ui/kbd";
+import { ShortcutsToggle } from "@/components/ui/shortcuts-toggle";
 import { useShortcutsEnabled } from "@/domain/infra/store";
 import { cn } from "@/lib/utils";
 
@@ -57,14 +58,15 @@ export function DashboardTabs({
 			className={cn("border-border border-b", className)}
 			data-testid="dashboard-tabs"
 		>
-			{shortcutsEnabled && (
-				<div className="flex items-center justify-between px-6 py-2">
+			<div className="flex items-center justify-between px-6 py-2">
+				{shortcutsEnabled && (
 					<div className="text-muted-foreground text-xs">
 						Use <Kbd>Ctrl</Kbd> + <Kbd>L</Kbd>, <Kbd>O</Kbd>, <Kbd>A</Kbd> to
 						navigate
 					</div>
-				</div>
-			)}
+				)}
+				<ShortcutsToggle />
+			</div>
 
 			<nav className="-mb-px flex space-x-8 px-6" aria-label="Dashboard Tabs">
 				{tabs.map((tab) => (

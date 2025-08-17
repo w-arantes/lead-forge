@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ShortcutsToggle } from "@/components/ui/shortcuts-toggle";
 import { LeadsTableSkeleton } from "@/components/ui/table-skeleton";
 import type { Lead, LeadFilters } from "@/domain/models";
 import { dateUtils } from "@/helpers/date";
@@ -175,7 +174,6 @@ export function LeadsTable({
 				</div>
 
 				<div className="flex gap-2">
-					<ShortcutsToggle />
 					<Button
 						onClick={onExport}
 						variant="outline"
