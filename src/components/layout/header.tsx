@@ -37,7 +37,9 @@ export function Header({
 							<h1 className="font-bold text-2xl">{title}</h1>
 							<AnvilIcon className="size-6" data-testid="logo" />
 						</div>
-						{rightSlot ? <div>{rightSlot}</div> : null}
+						<div className="flex items-center gap-2">
+							{rightSlot ? <div>{rightSlot}</div> : null}
+						</div>
 					</div>
 				</div>
 			</div>

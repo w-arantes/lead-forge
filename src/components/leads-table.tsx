@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ShortcutsToggle } from "@/components/ui/shortcuts-toggle";
 import { LeadsTableSkeleton } from "@/components/ui/table-skeleton";
 import type { Lead, LeadFilters } from "@/domain/models";
 import { dateUtils } from "@/helpers/date";
@@ -174,6 +175,7 @@ export function LeadsTable({
 				</div>
 
 				<div className="flex gap-2">
+					<ShortcutsToggle />
 					<Button
 						onClick={onExport}
 						variant="outline"
@@ -383,7 +385,7 @@ export function LeadsTable({
 							className="rounded-md border bg-background py-1.5 pr-6 pl-2 text-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
 							aria-label="Rows per page"
 						>
-							{[10, 20, 50].map((size) => (
+							{[10, 20, 50, 100].map((size) => (
 								<option key={size} value={size}>
 									{size}
 								</option>
