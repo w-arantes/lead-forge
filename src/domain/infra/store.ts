@@ -13,6 +13,7 @@ interface AppState {
 	error: string | null;
 	activeTab: "leads" | "opportunities" | "analytics";
 	isHeaderHidden: boolean;
+	shortcutsEnabled: boolean;
 	filters: LeadFilters;
 	selectedLead: Lead | null;
 	isDetailPanelOpen: boolean;
@@ -38,6 +39,7 @@ interface AppActions {
 	setError: (error: string | null) => void;
 	setActiveTab: (tab: AppState["activeTab"]) => void;
 	setHeaderHidden: (hidden: boolean) => void;
+	toggleShortcuts: () => void;
 	updateFilters: (filters: Partial<LeadFilters>) => void;
 	resetFilters: () => void;
 	setSelectedLead: (lead: Lead | null) => void;
@@ -79,6 +81,7 @@ export const useAppStore = create<AppStore>()(
 			error: null,
 			activeTab: "leads",
 			isHeaderHidden: false,
+			shortcutsEnabled: false,
 			filters: defaultFilters,
 			selectedLead: null,
 			isDetailPanelOpen: false,
@@ -133,6 +136,8 @@ export const useAppStore = create<AppStore>()(
 			setError: (error) => set({ error }),
 			setActiveTab: (activeTab) => set({ activeTab }),
 			setHeaderHidden: (isHeaderHidden) => set({ isHeaderHidden }),
+			toggleShortcuts: () =>
+				set((state) => ({ shortcutsEnabled: !state.shortcutsEnabled })),
 
 			updateFilters: (newFilters) => {
 				set((state) => ({
@@ -182,6 +187,7 @@ export const useAppStore = create<AppStore>()(
 				opportunities: state.opportunities,
 				filters: state.filters,
 				activeTab: state.activeTab,
+				shortcutsEnabled: state.shortcutsEnabled,
 			}),
 			onRehydrateStorage: () => (state) => {
 				if (state) {
@@ -201,6 +207,8 @@ export const useError = () => useAppStore((state) => state.error);
 export const useActiveTab = () => useAppStore((state) => state.activeTab);
 export const useIsHeaderHidden = () =>
 	useAppStore((state) => state.isHeaderHidden);
+export const useShortcutsEnabled = () =>
+	useAppStore((state) => state.shortcutsEnabled);
 export const useFilters = () => useAppStore((state) => state.filters);
 export const useSelectedLead = () => useAppStore((state) => state.selectedLead);
 export const useDetailPanelOpen = () =>
@@ -222,6 +230,7 @@ export const useAppActions = () => {
 		setError: state.setError,
 		setActiveTab: state.setActiveTab,
 		setHeaderHidden: state.setHeaderHidden,
+		toggleShortcuts: state.toggleShortcuts,
 		updateFilters: state.updateFilters,
 		resetFilters: state.resetFilters,
 		setSelectedLead: state.setSelectedLead,
