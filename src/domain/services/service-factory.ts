@@ -1,6 +1,6 @@
 import { LeadRepositoryImpl } from "@/domain/repositories/lead-repository-impl";
 import { OpportunityRepositoryImpl } from "@/domain/repositories/opportunity-repository-impl";
-import { LeadUseCases, OpportunityUseCases } from "@/domain/usecases";
+import { LeadUseCases, OpportunityUseCases } from "@/domain/use-cases";
 
 export class ServiceFactory {
 	private static instance: ServiceFactory;
