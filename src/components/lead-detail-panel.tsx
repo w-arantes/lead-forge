@@ -148,7 +148,10 @@ export function LeadDetailPanel({
 	};
 
 	return (
-		<div className="fixed inset-0 z-50 overflow-hidden">
+		<div
+			className="fixed inset-0 z-50 overflow-hidden"
+			data-testid="lead-detail-panel"
+		>
 			<div className="absolute inset-0 overflow-hidden">
 				<button
 					type="button"
@@ -236,6 +239,7 @@ export function LeadDetailPanel({
 														}
 														className="mt-1 block h-10 w-full rounded-lg border-input bg-background px-3 shadow-sm focus:border-ring focus:ring-ring sm:text-sm"
 														{...register("email")}
+														data-testid="email-input"
 													/>
 													{editErrors.email && (
 														<p
@@ -251,7 +255,10 @@ export function LeadDetailPanel({
 													<div className="block text-muted-foreground text-sm">
 														Email
 													</div>
-													<p className="mt-1 text-foreground text-sm">
+													<p
+														className="mt-1 text-foreground text-sm"
+														data-testid="email-field"
+													>
 														{lead.email}
 													</p>
 												</>
@@ -334,6 +341,7 @@ export function LeadDetailPanel({
 											onClick={handleEdit}
 											variant="outline"
 											className="w-full"
+											data-testid="edit-lead-button"
 										>
 											<Edit3 className="mr-2 h-4 w-4" />
 											Edit Lead
@@ -347,6 +355,7 @@ export function LeadDetailPanel({
 												type="submit"
 												disabled={isUpdating || !isEditDirty}
 												className="flex-1"
+												data-testid="save-lead-button"
 											>
 												{isUpdating ? (
 													<div className="mr-2 h-4 w-4 animate-spin rounded-full border-white border-b-2" />
@@ -404,6 +413,7 @@ export function LeadDetailPanel({
 																	: undefined
 															}
 															className="block h-10 w-full rounded-lg border-input bg-background px-3 pr-12 shadow-sm transition-colors focus:border-ring focus:ring-ring sm:text-sm"
+															data-testid="amount-input"
 														/>
 														<div className="-translate-y-1/2 pointer-events-none absolute top-1/2 right-3 font-medium text-muted-foreground text-sm">
 															USD
@@ -423,6 +433,7 @@ export function LeadDetailPanel({
 													type="submit"
 													disabled={isConverting}
 													className="w-full bg-green-600 hover:bg-green-700"
+													data-testid="convert-button"
 												>
 													{isConverting ? (
 														<div className="mr-2 h-4 w-4 animate-spin rounded-full border-white border-b-2" />

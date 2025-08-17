@@ -79,6 +79,10 @@ export function StatsCards({
 		},
 	];
 
+	// Add conversion rate calculation
+	const conversionRate =
+		totalLeads > 0 ? Math.round((convertedLeads / totalLeads) * 100) : 0;
+
 	const handleStatClick = (filter?: Filter) => {
 		if (filter) {
 			onFilterChange(filter);
@@ -86,7 +90,7 @@ export function StatsCards({
 	};
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-6" data-testid="stats-cards">
 			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 				<div>
 					<h1 className="font-bold text-2xl text-foreground dark:text-white">
@@ -102,6 +106,7 @@ export function StatsCards({
 					onClick={onExport}
 					variant="outline"
 					className="gap-2"
+					data-testid="export-button"
 				>
 					<Download className="h-4 w-4" />
 					Export Leads
@@ -129,6 +134,7 @@ export function StatsCards({
 								onClick={
 									stat.filter ? () => handleStatClick(stat.filter) : undefined
 								}
+								data-testid={stat.name.toLowerCase().replace(/\s+/g, "-")}
 							>
 								<div className="flex items-center justify-between">
 									<div>
@@ -157,7 +163,10 @@ export function StatsCards({
 			)}
 
 			{/* Pipeline Value Card */}
-			<div className="hover-lift hover-scale rounded-xl border border-primary/20 bg-gradient-to-r from-primary/10 to-primary/5 p-6">
+			<div
+				className="hover-lift hover-scale rounded-xl border border-primary/20 bg-gradient-to-r from-primary/10 to-primary/5 p-6"
+				data-testid="total-value"
+			>
 				<div className="flex items-center justify-between">
 					<div>
 						<h3 className="font-semibold text-lg dark:text-white">
@@ -172,6 +181,29 @@ export function StatsCards({
 					</div>
 					<div className="rounded-lg bg-primary/10 p-4">
 						<DollarSign className="h-8 w-8 text-primary" />
+					</div>
+				</div>
+			</div>
+
+			{/* Conversion Rate Card */}
+			<div
+				className="hover-lift hover-scale rounded-xl border border-green-200 bg-gradient-to-r from-green-50 to-green-100 p-6"
+				data-testid="conversion-rate"
+			>
+				<div className="flex items-center justify-between">
+					<div>
+						<h3 className="font-semibold text-green-800 text-lg">
+							Conversion Rate
+						</h3>
+						<p className="font-bold text-3xl text-green-600">
+							{conversionRate}%
+						</p>
+						<p className="mt-1 text-green-700 text-sm">
+							Leads converted to opportunities
+						</p>
+					</div>
+					<div className="rounded-lg bg-green-200 p-4">
+						<Target className="h-8 w-8 text-green-600" />
 					</div>
 				</div>
 			</div>
