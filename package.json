@@ -61,7 +61,10 @@
 			"biome check --write",
 			"biome format --write"
 		],
-		"*.{css,html,json}": [
+		"*.{css,json}": [
+			"biome format --write"
+		],
+		"*.html": [
 			"biome format --write"
 		]
 	},
