@@ -64,7 +64,6 @@ export class LeadRepositoryImpl implements LeadRepository {
 			}
 
 			leads[leadIndex] = { ...leads[leadIndex], ...data };
-			// Don't update storage here - let the store handle it
 			return leads[leadIndex];
 		} catch (error) {
 			throw new Error(
@@ -104,7 +103,6 @@ export class LeadRepositoryImpl implements LeadRepository {
 				throw new Error("Lead not found");
 			}
 
-			// Update lead status to converted
 			leads[leadIndex].status = LEAD_STATUSES.CONVERTED;
 			leads[leadIndex].convertedAt = new Date().toISOString();
 
