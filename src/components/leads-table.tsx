@@ -16,6 +16,7 @@ import {
 import { useMemo, useState } from "react";
 import { LeadsTableSkeleton } from "@/components/features/table-skeleton";
 import { Button } from "@/components/ui/button";
+import { Select } from "@/components/ui/select";
 import type { Lead, LeadFilters } from "@/domain/models";
 import { getStatusColor } from "@/domain/models";
 import { dateUtils } from "@/helpers/date";
@@ -214,18 +215,16 @@ export function LeadsTable({
 				<div className="flex gap-2">
 					<div className="relative">
 						<Filter className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-muted-foreground" />
-						<select
+						<Select
 							value={statusFilter}
-							onChange={(e) => handleStatusChange(e.target.value)}
-							className="h-10 appearance-none rounded-lg border bg-background pr-8 pl-10 text-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+							onChange={handleStatusChange}
+							options={statusOptions.map((status) => ({
+								value: status,
+								label: status || "All Statuses",
+							}))}
+							className="h-10 w-40 pl-10"
 							data-testid="status-filter"
-						>
-							{statusOptions.map((status) => (
-								<option key={status} value={status}>
-									{status || "All Statuses"}
-								</option>
-							))}
-						</select>
+						/>
 					</div>
 
 					{(searchTerm || statusFilter) && (
@@ -366,22 +365,19 @@ export function LeadsTable({
 				<div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
 					<div className="flex items-center gap-2 text-muted-foreground text-sm">
 						<span>Rows per page:</span>
-						<select
+						<Select
 							value={pageSize}
-							onChange={(e) => {
-								const newSize = Number(e.target.value);
-								setPageSize(newSize);
+							onChange={(newSize) => {
+								setPageSize(Number(newSize));
 								setPage(1);
 							}}
-							className="rounded-md border bg-background py-1.5 pr-6 pl-2 text-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+							options={[10, 20, 50, 100].map((size) => ({
+								value: size,
+								label: size.toString(),
+							}))}
+							className="w-20"
 							aria-label="Rows per page"
-						>
-							{[10, 20, 50, 100].map((size) => (
-								<option key={size} value={size}>
-									{size}
-								</option>
-							))}
-						</select>
+						/>
 						<span className="hidden sm:inline">|</span>
 						<span>
 							{startIndex + 1}–{endIndex} of {totalItems}
