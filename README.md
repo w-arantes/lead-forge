@@ -1,23 +1,15 @@
 <div align="center">
-  <div style="
-    font-size: 3rem; 
-    font-weight: bold; 
-    color: #ffffff; 
-    margin: 20px 0; 
-    padding: 20px; 
-    background: #000000; 
-    border-radius: 20px; 
-    display: inline-block;
-    min-width: 200px;
-  ">
-    Lead Forge
-  </div>
+  <img src="docs/image/logo.png" alt="Lead Forge Logo" style="
+    width: 100%;
+    max-width: 400px;
+    margin: 20px 0;
+  " />
   
   <h3>Modern Lead Management & Sales Pipeline Console</h3>
   
   <p><strong>Transform your sales process with intelligent lead management, opportunity tracking, and data-driven insights.</strong></p>
   
-  <h4 style="color: #087f5b; font-style: italic; margin: 20px 0;">"Turning prospects into powerful opportunities."</h4>
+  <h4 style="font-style: italic; margin: 20px 0;">"Turning prospects into powerful opportunities."</h4>
   
   [![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
