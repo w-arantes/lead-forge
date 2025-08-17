@@ -1,36 +1,28 @@
-# 🚀 Lead Forge
-
 <div align="center">
   <div style="
     font-size: 3rem; 
     font-weight: bold; 
-    color: #1f2937; 
+    color: #ffffff; 
     margin: 20px 0; 
     padding: 20px; 
-    background: linear-gradient(135deg, #0a0a0a, #1a1a1a); 
+    background: #000000; 
     border-radius: 20px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     display: inline-block;
     min-width: 200px;
   ">
-    <span style="color: white;">Lead Forge</span>
+    Lead Forge
   </div>
   
   <h3>Modern Lead Management & Sales Pipeline Console</h3>
   
   <p><strong>Transform your sales process with intelligent lead management, opportunity tracking, and data-driven insights.</strong></p>
   
-  <h4 style="color: #06b6d4; font-style: italic; margin: 20px 0;">"Turning prospects into powerful opportunities."</h4>
+  <h4 style="color: #087f5b; font-style: italic; margin: 20px 0;">"Turning prospects into powerful opportunities."</h4>
   
   [![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.12-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
   [![Vite](https://img.shields.io/badge/Vite-7.1.2-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://opensource.org/licenses/MIT)
-  
-  [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge)](https://github.com/your-username/lead-forge)
-  [![Test Coverage](https://img.shields.io/badge/Tests-100%25-brightgreen?style=for-the-badge)](https://github.com/your-username/lead-forge)
-  [![Code Quality](https://img.shields.io/badge/Quality-A%2B-brightgreen?style=for-the-badge)](https://github.com/your-username/lead-forge)
 </div>
 
 ---
@@ -43,10 +35,11 @@
 - [🏗️ Architecture](#️-architecture)
 - [🚀 Quick Start](#-quick-start)
 - [🛠️ Development](#️-development)
-- [🧪 Testing](#-testing)
 - [📊 Data Models](#-data-models)
 - [🎮 User Guide](#-user-guide)
-- [🤝 Contributing](#-contributing)
+- [📱 Browser Support](#-browser-support)
+- [🙏 Acknowledgments](#-acknowledgments)
+- [🧪 Testing](#-testing)
 
 ---
 
@@ -91,7 +84,7 @@ Lead Forge provides everything your sales team needs to succeed:
 | **Real-time Updates** | Instant feedback and state synchronization |
 | **Smooth Animations** | Subtle transitions and loading states |
 
-### 🔧 **Technical Excellence**
+### 🔧 **Technical Features**
 | Feature | Description |
 |---------|-------------|
 | **Type Safety** | Full TypeScript implementation with strict typing |
@@ -267,43 +260,7 @@ yarn test:e2e:debug   # Run tests in debug mode
 
 ---
 
-## 🧪 Testing
 
-### **Testing Strategy** 🎯
-
-Our testing approach focuses on **End-to-End (E2E) testing** using Playwright to ensure complete user workflows function correctly across all browsers and devices.
-
-### **E2E Testing Stack** ⭐
-
-- **Framework**: Playwright (cross-browser testing)
-- **Coverage**: Complete user journeys and critical business flows
-- **Browsers**: Chromium, Firefox, WebKit, Mobile Chrome
-- **Features**: Screenshots on failure, traces for debugging
-
-### **Running Tests**
-
-```bash
-# Run all E2E tests
-yarn test:e2e
-
-# Run tests with UI mode (interactive)
-yarn test:e2e:ui
-
-# Run tests in headed mode (see browser)
-yarn test:e2e:headed
-
-# Run tests in debug mode
-yarn test:e2e:debug
-```
-
-### **Test Reports**
-
-After running tests, HTML reports are generated:
-```bash
-npx playwright show-report
-```
-
----
 
 ## 📊 Data Models
 
@@ -471,20 +428,42 @@ interface Opportunity {
 
 ---
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🧪 Testing
 
----
+### **Testing Strategy** 🎯
 
-## 🙏 Acknowledgments
+Our testing approach focuses on **End-to-End (E2E) testing** using Playwright to ensure complete user workflows function correctly across all browsers and devices.
 
-- [React](https://react.dev/) - UI library
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [Zustand](https://zustand-demo.pmnd.rs/) - State management
-- [Vite](https://vitejs.dev/) - Build tool
-- [Biome](https://biomejs.dev/) - Code quality tools
-- [Playwright](https://playwright.dev/) - Testing framework
+### **E2E Testing Stack** ⭐
+
+- **Framework**: Playwright (cross-browser testing)
+- **Coverage**: Complete user journeys and critical business flows
+- **Browsers**: Chromium, Firefox, WebKit, Mobile Chrome
+- **Features**: Screenshots on failure, traces for debugging
+
+### **Running Tests**
+
+```bash
+# Run all E2E tests
+yarn test:e2e
+
+# Run tests with UI mode (interactive)
+yarn test:e2e:ui
+
+# Run tests in headed mode (see browser)
+yarn test:e2e:headed
+
+# Run tests in debug mode
+yarn test:e2e:debug
+```
+
+### **Test Reports**
+
+After running tests, HTML reports are generated:
+```bash
+npx playwright show-report
+```
 
 ---
 
