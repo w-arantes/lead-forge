@@ -1,11 +1,10 @@
-import { getServices } from "@/domain/services/service-factory";
-
 import type {
-	Lead,
 	CreateLeadRequest,
-	UpdateLeadRequest,
+	Lead,
 	Opportunity,
+	UpdateLeadRequest,
 } from "@/domain/models";
+import { getServices } from "@/domain/services/service-factory";
 
 export class ApiService {
 	private static instance: ApiService;

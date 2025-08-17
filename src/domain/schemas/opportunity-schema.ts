@@ -10,7 +10,7 @@ export const OpportunityFormSchema = z.object({
 		.min(2, "Opportunity name must be at least 2 characters")
 		.max(100, "Opportunity name cannot exceed 100 characters")
 		.regex(
-			/^[a-zA-Z0-9\s\-'\.&]+$/,
+			/^[a-zA-Z0-9\s\-'.&]+$/,
 			"Name can only contain letters, numbers, spaces, hyphens, apostrophes, periods, and ampersands",
 		),
 	stage: z.enum(opportunityStages as [string, ...string[]], {
@@ -27,7 +27,7 @@ export const OpportunityFormSchema = z.object({
 		.min(2, "Account name must be at least 2 characters")
 		.max(100, "Account name cannot exceed 100 characters")
 		.regex(
-			/^[a-zA-Z0-9\s\-'\.&]+$/,
+			/^[a-zA-Z0-9\s\-'.&]+$/,
 			"Account name can only contain letters, numbers, spaces, hyphens, apostrophes, periods, and ampersands",
 		),
 	convertedFrom: z
@@ -50,7 +50,7 @@ export const OpportunityUpdateSchema = z.object({
 		.min(2, "Opportunity name must be at least 2 characters")
 		.max(100, "Opportunity name cannot exceed 100 characters")
 		.regex(
-			/^[a-zA-Z0-9\s\-'\.&]+$/,
+			/^[a-zA-Z0-9\s\-'.&]+$/,
 			"Name can only contain letters, numbers, spaces, hyphens, apostrophes, periods, and ampersands",
 		)
 		.optional(),
@@ -71,7 +71,7 @@ export const OpportunityUpdateSchema = z.object({
 		.min(2, "Account name must be at least 2 characters")
 		.max(100, "Account name cannot exceed 100 characters")
 		.regex(
-			/^[a-zA-Z0-9\s\-'\.&]+$/,
+			/^[a-zA-Z0-9\s\-'.&]+$/,
 			"Account name can only contain letters, numbers, spaces, hyphens, apostrophes, periods, and ampersands",
 		)
 		.optional(),

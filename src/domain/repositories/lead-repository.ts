@@ -1,6 +1,6 @@
 import type {
-	Lead,
 	CreateLeadRequest,
+	Lead,
 	UpdateLeadRequest,
 } from "@/domain/models";
 

@@ -1,6 +1,6 @@
-import type { Opportunity, CreateOpportunityRequest } from "@/domain/models";
-import type { OpportunityRepository } from "@/domain/repositories/opportunity-repository";
 import { storage } from "@/domain/infra/storage";
+import type { CreateOpportunityRequest, Opportunity } from "@/domain/models";
+import type { OpportunityRepository } from "@/domain/repositories/opportunity-repository";
 
 export class OpportunityRepositoryImpl implements OpportunityRepository {
 	async getAll(): Promise<Opportunity[]> {

@@ -38,7 +38,7 @@ export const LeadFormSchema = z.object({
 		.min(2, "Name must be at least 2 characters")
 		.max(100, "Name cannot exceed 100 characters")
 		.regex(
-			/^[a-zA-Z\s\-'\.]+$/,
+			/^[a-zA-Z\s\-'.]+$/,
 			"Name can only contain letters, spaces, hyphens, apostrophes, and periods",
 		),
 	company: z
@@ -47,7 +47,7 @@ export const LeadFormSchema = z.object({
 		.min(2, "Company must be at least 2 characters")
 		.max(100, "Company cannot exceed 100 characters")
 		.regex(
-			/^[a-zA-Z0-9\s\-'\.&]+$/,
+			/^[a-zA-Z0-9\s\-'.&]+$/,
 			"Company can only contain letters, numbers, spaces, hyphens, apostrophes, periods, and ampersands",
 		),
 	email: z
@@ -78,7 +78,7 @@ export const LeadUpdateSchema = z.object({
 		.min(2, "Name must be at least 2 characters")
 		.max(100, "Name cannot exceed 100 characters")
 		.regex(
-			/^[a-zA-Z\s\-'\.]+$/,
+			/^[a-zA-Z\s\-'.]+$/,
 			"Name can only contain letters, spaces, hyphens, apostrophes, and periods",
 		)
 		.optional(),
@@ -88,7 +88,7 @@ export const LeadUpdateSchema = z.object({
 		.min(2, "Company must be at least 2 characters")
 		.max(100, "Company cannot exceed 100 characters")
 		.regex(
-			/^[a-zA-Z0-9\s\-'\.&]+$/,
+			/^[a-zA-Z0-9\s\-'.&]+$/,
 			"Company can only contain letters, numbers, spaces, hyphens, apostrophes, periods, and ampersands",
 		)
 		.optional(),

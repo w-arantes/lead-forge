@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 import {
+	ConvertToOpportunitySchema,
 	LeadFormSchema,
 	LeadUpdateSchema,
-	ConvertToOpportunitySchema,
 	OpportunityFormSchema,
 	OpportunityUpdateSchema,
 } from "@/domain/schemas";

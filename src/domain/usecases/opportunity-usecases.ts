@@ -1,4 +1,4 @@
-import type { Opportunity, CreateOpportunityRequest } from "@/domain/models";
+import type { CreateOpportunityRequest, Opportunity } from "@/domain/models";
 import type { OpportunityRepository } from "@/domain/repositories/opportunity-repository";
 
 export class OpportunityUseCases {

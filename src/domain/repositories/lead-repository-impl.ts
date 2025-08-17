@@ -1,11 +1,11 @@
+import { storage } from "@/domain/infra/storage";
 import type {
-	Lead,
 	CreateLeadRequest,
+	Lead,
 	UpdateLeadRequest,
 } from "@/domain/models";
-import type { LeadRepository } from "@/domain/repositories/lead-repository";
-import { storage } from "@/domain/infra/storage";
 import { LEAD_STATUSES } from "@/domain/models";
+import type { LeadRepository } from "@/domain/repositories/lead-repository";
 
 export class LeadRepositoryImpl implements LeadRepository {
 	async getAll(): Promise<Lead[]> {

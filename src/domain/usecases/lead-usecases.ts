@@ -1,11 +1,11 @@
 import type {
-	Lead,
 	CreateLeadRequest,
+	Lead,
 	UpdateLeadRequest,
 } from "@/domain/models";
+import { LEAD_STATUSES, OPPORTUNITY_STAGES } from "@/domain/models";
 import type { LeadRepository } from "@/domain/repositories/lead-repository";
 import type { OpportunityRepository } from "@/domain/repositories/opportunity-repository";
-import { LEAD_STATUSES, OPPORTUNITY_STAGES } from "@/domain/models";
 
 export class LeadUseCases {
 	private leadRepository: LeadRepository;

@@ -83,7 +83,7 @@ export const UserProfileSchema = z.object({
 		.min(1, "First name is required")
 		.max(50, "First name cannot exceed 50 characters")
 		.regex(
-			/^[a-zA-Z\s\-'\.]+$/,
+			/^[a-zA-Z\s\-'.]+$/,
 			"First name can only contain letters, spaces, hyphens, apostrophes, and periods",
 		),
 	lastName: z
@@ -92,7 +92,7 @@ export const UserProfileSchema = z.object({
 		.min(1, "Last name is required")
 		.max(50, "Last name cannot exceed 50 characters")
 		.regex(
-			/^[a-zA-Z\s\-'\.]+$/,
+			/^[a-zA-Z\s\-'.]+$/,
 			"Last name can only contain letters, spaces, hyphens, apostrophes, and periods",
 		),
 	email: z
@@ -105,7 +105,7 @@ export const UserProfileSchema = z.object({
 	phone: z
 		.string()
 		.trim()
-		.regex(/^[\+]?[1-9][\d]{0,15}$/, "Please enter a valid phone number")
+		.regex(/^[+]?[1-9][\d]{0,15}$/, "Please enter a valid phone number")
 		.optional(),
 	avatar: z.string().url("Avatar must be a valid URL").optional(),
 	timezone: z.string().default("UTC"),

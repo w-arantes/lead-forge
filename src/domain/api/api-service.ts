@@ -1,10 +1,10 @@
-import { getServices } from "@/domain/services/service-factory";
 import type {
-	Lead,
 	CreateLeadRequest,
-	UpdateLeadRequest,
+	Lead,
 	Opportunity,
+	UpdateLeadRequest,
 } from "@/domain/models";
+import { getServices } from "@/domain/services/service-factory";
 
 // API service that uses use cases instead of direct repository access
 export class ApiService {
