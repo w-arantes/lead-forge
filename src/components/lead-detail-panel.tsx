@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 
 import type { Lead, LeadStatus, Opportunity } from "@/domain/models";
-import { LEAD_STATUSES } from "@/domain/models";
+import { getStatusColor, LEAD_STATUSES } from "@/domain/models";
 import {
 	type ConvertToOpportunityInput,
 	ConvertToOpportunitySchema,
@@ -129,21 +129,6 @@ export function LeadDetailPanel({
 			setError(err instanceof Error ? err.message : "Failed to convert lead");
 		} finally {
 			setIsConverting(false);
-		}
-	};
-
-	const getStatusColor = (status: string) => {
-		switch (status) {
-			case LEAD_STATUSES.NEW:
-				return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300";
-			case LEAD_STATUSES.QUALIFIED:
-				return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300";
-			case LEAD_STATUSES.HOT:
-				return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300";
-			case LEAD_STATUSES.CONVERTED:
-				return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300";
-			default:
-				return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300";
 		}
 	};
 
