@@ -86,7 +86,7 @@ export const emailSchema = z
 export const phoneSchema = z
 	.string()
 	.trim()
-	.regex(/^[\+]?[1-9][\d]{0,15}$/, "Please enter a valid phone number")
+	.regex(/^[+]?[1-9][\d]{0,15}$/, "Please enter a valid phone number")
 	.optional();
 
 /**
