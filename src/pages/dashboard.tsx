@@ -51,11 +51,9 @@ export function Dashboard() {
 	const { toasts, removeToast, showSuccessToast, showErrorToast } =
 		useToastManager();
 
-	// Get services directly from the service factory
 	const services = getServices();
 	const leadUseCases = services.getLeadUseCases();
 
-	// Get data from store
 	const leads = useLeads();
 	const opportunities = useOpportunities();
 
