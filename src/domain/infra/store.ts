@@ -1,8 +1,10 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import type { Lead, Opportunity, LeadFilters } from "@/domain/models";
+import { STORAGE_KEYS } from "@/constants/storage";
+import type { Lead, LeadFilters, Opportunity } from "@/domain/models";
 import { LEAD_STATUSES, OPPORTUNITY_STAGES } from "@/domain/models";
+import { storage } from "./storage";
 
 interface AppState {
 	leads: Lead[];
@@ -56,11 +58,23 @@ const defaultFilters: LeadFilters = {
 	sortOrder: "desc",
 };
 
+const createToastId = (): string => Math.random().toString(36).substr(2, 9);
+
+const createOpportunity = (lead: Lead, amount?: number): Opportunity => ({
+	id: `opp_${Date.now()}`,
+	name: lead.name,
+	stage: OPPORTUNITY_STAGES.PROSPECTING,
+	amount,
+	accountName: lead.company,
+	convertedFrom: lead.id,
+	convertedAt: new Date().toISOString(),
+});
+
 export const useAppStore = create<AppStore>()(
 	persist(
 		(set, get) => ({
-			leads: [],
-			opportunities: [],
+			leads: storage.getLeads(),
+			opportunities: storage.getOpportunities(),
 			loading: false,
 			error: null,
 			activeTab: "leads",
@@ -70,82 +84,111 @@ export const useAppStore = create<AppStore>()(
 			isDetailPanelOpen: false,
 			isAddLeadModalOpen: false,
 			toasts: [],
-			setLeads: (leads) => set({ leads }),
-			addLead: (lead) => set((state) => ({ leads: [...state.leads, lead] })),
-			updateLead: (id, updates) =>
-				set((state) => ({
-					leads: state.leads.map((lead) =>
+
+			setLeads: (leads) => {
+				set({ leads });
+				storage.setLeads(leads);
+			},
+
+			addLead: (lead) => {
+				set((state) => {
+					const newLeads = [...state.leads, lead];
+					storage.setLeads(newLeads);
+					return { leads: newLeads };
+				});
+			},
+
+			updateLead: (id, updates) => {
+				set((state) => {
+					const updatedLeads = state.leads.map((lead) =>
 						lead.id === id ? { ...lead, ...updates } : lead,
-					),
-				})),
-			deleteLead: (id) =>
-				set((state) => ({
-					leads: state.leads.filter((lead) => lead.id !== id),
-				})),
-			setOpportunities: (opportunities) => set({ opportunities }),
-			addOpportunity: (opportunity) =>
-				set((state) => ({
-					opportunities: [...state.opportunities, opportunity],
-				})),
+					);
+					storage.setLeads(updatedLeads);
+					return { leads: updatedLeads };
+				});
+			},
+
+			deleteLead: (id) => {
+				set((state) => {
+					const filteredLeads = state.leads.filter((lead) => lead.id !== id);
+					storage.setLeads(filteredLeads);
+					return { leads: filteredLeads };
+				});
+			},
+
+			setOpportunities: (opportunities) => {
+				set({ opportunities });
+				storage.setOpportunities(opportunities);
+			},
+
+			addOpportunity: (opportunity) => {
+				set((state) => {
+					const newOpportunities = [...state.opportunities, opportunity];
+					storage.setOpportunities(newOpportunities);
+					return { opportunities: newOpportunities };
+				});
+			},
+
 			setLoading: (loading) => set({ loading }),
 			setError: (error) => set({ error }),
 			setActiveTab: (activeTab) => set({ activeTab }),
 			setHeaderHidden: (isHeaderHidden) => set({ isHeaderHidden }),
-			updateFilters: (newFilters) =>
+
+			updateFilters: (newFilters) => {
 				set((state) => ({
 					filters: { ...state.filters, ...newFilters },
-				})),
+				}));
+			},
+
 			resetFilters: () => set({ filters: defaultFilters }),
 			setSelectedLead: (selectedLead) => set({ selectedLead }),
 			setDetailPanelOpen: (isDetailPanelOpen) => set({ isDetailPanelOpen }),
 			setAddLeadModalOpen: (isAddLeadModalOpen) => set({ isAddLeadModalOpen }),
+
 			addToast: (toast) => {
-				const id = Math.random().toString(36).substr(2, 9);
+				const id = createToastId();
 				set((state) => ({
 					toasts: [
 						...state.toasts,
 						{ ...toast, id, onClose: (id: string) => get().removeToast(id) },
 					],
 				}));
-				setTimeout(() => {
-					get().removeToast(id);
-				}, toast.duration || 5000);
+				setTimeout(() => get().removeToast(id), toast.duration || 5000);
 			},
-			removeToast: (id) =>
+
+			removeToast: (id) => {
 				set((state) => ({
 					toasts: state.toasts.filter((toast) => toast.id !== id),
-				})),
+				}));
+			},
+
 			convertLead: async (lead, amount) => {
-				const opportunity: Opportunity = {
-					id: `opp_${Date.now()}`,
-					name: lead.name,
-					stage: OPPORTUNITY_STAGES.PROSPECTING,
-					amount,
-					accountName: lead.company,
-					convertedFrom: lead.id,
-					convertedAt: new Date().toISOString(),
-				};
-
+				const opportunity = createOpportunity(lead, amount);
 				get().updateLead(lead.id, { status: LEAD_STATUSES.CONVERTED });
-
 				get().addOpportunity(opportunity);
-
 				return opportunity;
 			},
 
 			exportData: async () => {
-				// TODO: implement export functionality
-				void get().leads; // keep reference to avoid unused warnings until implemented
+				const state = get();
+				await storage.exportLeadsToCSV(state.leads);
+				await storage.exportOpportunitiesToCSV(state.opportunities);
 			},
 		}),
 		{
-			name: "lead-forge-store",
+			name: STORAGE_KEYS.ZUSTAND_STORE,
 			partialize: (state) => ({
 				leads: state.leads,
 				opportunities: state.opportunities,
 				filters: state.filters,
 				activeTab: state.activeTab,
 			}),
+			onRehydrateStorage: () => (state) => {
+				if (state) {
+					state.leads = storage.getLeads();
+					state.opportunities = storage.getOpportunities();
+				}
+			},
 		},
 	),
 );
