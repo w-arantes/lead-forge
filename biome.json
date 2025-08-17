@@ -26,6 +26,12 @@
 					"fix": "safe",
 					"options": {}
 				}
+			},
+			"complexity": {
+				"noImportantStyles": "off"
+			},
+			"suspicious": {
+				"noUnknownAtRules": "off"
 			}
 		}
 	},
