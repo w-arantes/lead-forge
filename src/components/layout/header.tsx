@@ -23,6 +23,7 @@ export function Header({
 				isHidden && "header-hidden",
 				className,
 			)}
+			data-testid="header"
 		>
 			<div
 				className={cn(
@@ -34,7 +35,7 @@ export function Header({
 					<div className="flex items-center justify-between py-3">
 						<div className="flex items-center gap-3">
 							<h1 className="font-bold text-2xl">{title}</h1>
-							<AnvilIcon className="size-6" />
+							<AnvilIcon className="size-6" data-testid="logo" />
 						</div>
 						{rightSlot ? <div>{rightSlot}</div> : null}
 					</div>

@@ -81,6 +81,7 @@ export function ThemeToggle() {
 				aria-label="Select theme"
 				aria-expanded={isOpen}
 				aria-haspopup="listbox"
+				data-testid="theme-toggle"
 			>
 				{getThemeIcon()}
 				<span className="font-medium text-foreground text-sm">

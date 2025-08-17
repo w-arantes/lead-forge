@@ -22,7 +22,10 @@ export function DashboardTabs({
 	];
 
 	return (
-		<div className={cn("border-border border-b", className)}>
+		<div
+			className={cn("border-border border-b", className)}
+			data-testid="dashboard-tabs"
+		>
 			<nav className="-mb-px flex space-x-8 px-6" aria-label="Dashboard Tabs">
 				{tabs.map((tab) => (
 					<button
@@ -39,6 +42,7 @@ export function DashboardTabs({
 								: "border-transparent text-muted-foreground hover:border-border hover:text-foreground",
 						)}
 						onClick={() => onChange(tab.id)}
+						data-testid={`tab-${tab.id}`}
 					>
 						{tab.label}
 					</button>
