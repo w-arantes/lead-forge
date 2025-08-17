@@ -195,8 +195,7 @@ export function Dashboard() {
 						/>
 
 						<div className="mt-8 rounded-xl border bg-card">
-							<div className="flex items-center justify-between px-6 pt-6 pb-2">
-								<div className="text-muted-foreground text-sm">Show Hints</div>
+							<div className="flex items-center justify-between px-4 pt-6 pb-2">
 								<ShortcutsToggle />
 							</div>
 							<DashboardTabs
