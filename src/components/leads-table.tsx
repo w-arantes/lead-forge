@@ -14,8 +14,8 @@ import {
 	X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { LeadsTableSkeleton } from "@/components/features/table-skeleton";
 import { Button } from "@/components/ui/button";
-import { LeadsTableSkeleton } from "@/components/ui/table-skeleton";
 import type { Lead, LeadFilters } from "@/domain/models";
 import { dateUtils } from "@/helpers/date";
 

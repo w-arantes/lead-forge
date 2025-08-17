@@ -1,12 +1,12 @@
 import { useId } from "react";
 import { AddLeadModal } from "@/components/add-lead-modal";
 import { Analytics } from "@/components/analytics";
+import { ShortcutsToggle } from "@/components/features/shortcuts-toggle";
 import { DashboardTabs, Header, ThemeToggle } from "@/components/layout";
 import { LeadDetailPanel } from "@/components/lead-detail-panel";
 import { LeadsTable } from "@/components/leads-table";
 import { OpportunitiesTable } from "@/components/opportunities-table";
 import { StatsCards } from "@/components/stats-cards";
-import { ShortcutsToggle } from "@/components/ui/shortcuts-toggle";
 import { ToastContainer } from "@/components/ui/toast";
 import { storage } from "@/domain/infra/storage";
 import {

@@ -1,6 +1,6 @@
 import { Download, Eye } from "lucide-react";
+import { OpportunitiesTableSkeleton } from "@/components/features/table-skeleton";
 import { Button } from "@/components/ui/button";
-import { OpportunitiesTableSkeleton } from "@/components/ui/table-skeleton";
 import type { Lead, Opportunity } from "@/domain/models";
 import { dateUtils } from "@/helpers/date";
 

@@ -1,6 +1,6 @@
 import { DollarSign, Download, Target, TrendingUp, Users } from "lucide-react";
+import { StatsCardsSkeleton } from "@/components/features/stats-skeleton";
 import { Button } from "@/components/ui/button";
-import { StatsCardsSkeleton } from "@/components/ui/stats-skeleton";
 import type { Lead, Opportunity } from "@/domain/models";
 import { LEAD_STATUSES } from "@/domain/models";
 
