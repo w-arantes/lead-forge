@@ -6,6 +6,7 @@ import { LeadDetailPanel } from "@/components/lead-detail-panel";
 import { LeadsTable } from "@/components/leads-table";
 import { OpportunitiesTable } from "@/components/opportunities-table";
 import { StatsCards } from "@/components/stats-cards";
+import { ShortcutsToggle } from "@/components/ui/shortcuts-toggle";
 import { ToastContainer } from "@/components/ui/toast";
 import { storage } from "@/domain/infra/storage";
 import {
@@ -194,6 +195,10 @@ export function Dashboard() {
 						/>
 
 						<div className="mt-8 rounded-xl border bg-card">
+							<div className="flex items-center justify-between px-6 pt-6 pb-2">
+								<div className="text-muted-foreground text-sm">Show Hints</div>
+								<ShortcutsToggle />
+							</div>
 							<DashboardTabs
 								active={activeTab}
 								onChange={(tab) => setActiveTab(tab)}
