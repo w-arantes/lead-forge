@@ -18,6 +18,123 @@ interface AddLeadModalProps {
 	onAdd: (lead: Omit<Lead, "id">) => Promise<void>;
 }
 
+interface ModalHeaderProps {
+	title: string;
+	onClose: () => void;
+	uid: string;
+}
+
+interface FormFieldProps {
+	id: string;
+	label: string;
+	required?: boolean;
+	error?: string;
+	children: React.ReactNode;
+}
+
+interface FormActionsProps {
+	isSubmitting: boolean;
+	isDirty: boolean;
+	onSubmit: () => void;
+	onCancel: () => void;
+}
+
+function ModalHeader({ title, onClose, uid }: ModalHeaderProps) {
+	return (
+		<div className="border-b p-6">
+			<div className="mb-2 flex items-center justify-between">
+				<h2
+					className="font-semibold text-foreground text-lg"
+					id={`${uid}-modal-title`}
+				>
+					{title}
+				</h2>
+				<Button
+					variant="ghost"
+					size="sm"
+					onClick={onClose}
+					className="h-8 w-8 p-0"
+					aria-label="Close modal"
+				>
+					<X className="h-5 w-5" />
+				</Button>
+			</div>
+		</div>
+	);
+}
+
+function FormField({
+	id,
+	label,
+	required = false,
+	error,
+	children,
+}: FormFieldProps) {
+	return (
+		<div>
+			<label
+				htmlFor={id}
+				className="mb-2 block font-medium text-foreground text-sm"
+			>
+				{label} {required && "*"}
+			</label>
+			{children}
+			{error && (
+				<p
+					id={`${id}-error`}
+					className="mt-1 text-destructive text-sm"
+					role="alert"
+				>
+					{error}
+				</p>
+			)}
+		</div>
+	);
+}
+
+function FormActions({
+	isSubmitting,
+	isDirty,
+	onSubmit,
+	onCancel,
+}: FormActionsProps) {
+	return (
+		<>
+			<div className="flex gap-3 pt-4">
+				<Button
+					type="submit"
+					disabled={isSubmitting || !isDirty}
+					className="flex-1"
+					onClick={onSubmit}
+					data-testid="submit-button"
+				>
+					{isSubmitting ? (
+						<div className="mr-2 h-4 w-4 animate-spin rounded-full border-white border-b-2" />
+					) : (
+						<Save className="mr-2 h-4 w-4" />
+					)}
+					Add Lead
+				</Button>
+				<Button
+					type="button"
+					variant="outline"
+					onClick={onCancel}
+					className="flex-1"
+				>
+					<XCircle className="mr-2 h-4 w-4" />
+					Cancel
+				</Button>
+			</div>
+
+			{isSubmitting && (
+				<p className="text-center text-muted-foreground text-sm">
+					Adding lead...
+				</p>
+			)}
+		</>
+	);
+}
+
 export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 	const uid = useId();
 	const {
@@ -33,6 +150,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 		mode: "onBlur",
 		reValidateMode: "onChange",
 	});
+
 	const watchScore = watch("score", leadFormDefaults.score);
 
 	if (!isOpen) return null;
@@ -48,6 +166,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 				status: data.status as LeadStatus,
 				createdAt: dateUtils.now(),
 			};
+
 			await onAdd(leadData);
 			onClose();
 			reset(leadFormDefaults);
@@ -82,44 +201,25 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 							animation: "fadeIn 0.3s ease-out",
 						}}
 					>
-						{/* Header */}
-						<div className="border-b p-6">
-							<div className="mb-2 flex items-center justify-between">
-								<h2
-									className="font-semibold text-foreground text-lg"
-									id={`${uid}-modal-title`}
-								>
-									Add New Lead
-								</h2>
-								<button
-									onClick={handleClose}
-									className="rounded-lg p-2 transition-colors hover:bg-muted"
-									type="button"
-									aria-label="Close modal"
-								>
-									<X className="h-5 w-5" />
-								</button>
-							</div>
-						</div>
+						<ModalHeader title="Add New Lead" onClose={handleClose} uid={uid} />
 
-						{/* Form */}
 						<form
 							onSubmit={handleSubmit(onSubmit)}
 							className="space-y-4 p-6"
 							noValidate
 						>
-							{/* Name */}
-							<div>
-								<label
-									htmlFor={`${uid}-name`}
-									className="mb-2 block font-medium text-foreground text-sm"
-								>
-									Name *
-								</label>
+							<FormField
+								id={`${uid}-name`}
+								label="Name"
+								required
+								error={errors.name?.message}
+							>
 								<input
 									id={`${uid}-name`}
 									type="text"
-									className={`w-full rounded-lg border px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${errors.name ? "border-destructive" : "border-input"}`}
+									className={`w-full rounded-lg border px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${
+										errors.name ? "border-destructive" : "border-input"
+									}`}
 									placeholder="Enter lead name"
 									aria-describedby={
 										errors.name ? `${uid}-name-error` : undefined
@@ -128,29 +228,20 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									{...register("name")}
 									data-testid="name-input"
 								/>
-								{errors.name && (
-									<p
-										id={`${uid}-name-error`}
-										className="mt-1 text-destructive text-sm"
-										role="alert"
-									>
-										{errors.name.message}
-									</p>
-								)}
-							</div>
+							</FormField>
 
-							{/* Company */}
-							<div>
-								<label
-									htmlFor={`${uid}-company`}
-									className="mb-2 block font-medium text-foreground text-sm"
-								>
-									Company *
-								</label>
+							<FormField
+								id={`${uid}-company`}
+								label="Company"
+								required
+								error={errors.company?.message}
+							>
 								<input
 									id={`${uid}-company`}
 									type="text"
-									className={`w-full rounded-lg border px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${errors.company ? "border-destructive" : "border-input"}`}
+									className={`w-full rounded-lg border px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${
+										errors.company ? "border-destructive" : "border-input"
+									}`}
 									placeholder="Enter company name"
 									aria-describedby={
 										errors.company ? `${uid}-company-error` : undefined
@@ -159,29 +250,20 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									{...register("company")}
 									data-testid="company-input"
 								/>
-								{errors.company && (
-									<p
-										id={`${uid}-name-error`}
-										className="mt-1 text-destructive text-sm"
-										role="alert"
-									>
-										{errors.company.message}
-									</p>
-								)}
-							</div>
+							</FormField>
 
-							{/* Email */}
-							<div>
-								<label
-									htmlFor={`${uid}-email`}
-									className="mb-2 block font-medium text-foreground text-sm"
-								>
-									Email *
-								</label>
+							<FormField
+								id={`${uid}-email`}
+								label="Email"
+								required
+								error={errors.email?.message}
+							>
 								<input
 									id={`${uid}-email`}
 									type="email"
-									className={`w-full rounded-lg border px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${errors.email ? "border-destructive" : "border-input"}`}
+									className={`w-full rounded-lg border px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${
+										errors.email ? "border-destructive" : "border-input"
+									}`}
 									placeholder="Enter email address"
 									aria-describedby={
 										errors.email ? `${uid}-email-error` : undefined
@@ -190,25 +272,13 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									{...register("email")}
 									data-testid="email-input"
 								/>
-								{errors.email && (
-									<p
-										id={`${uid}-email-error`}
-										className="mt-1 text-destructive text-sm"
-										role="alert"
-									>
-										{errors.email.message}
-									</p>
-								)}
-							</div>
+							</FormField>
 
-							{/* Source */}
-							<div>
-								<label
-									htmlFor={`${uid}-source`}
-									className="mb-2 block font-medium text-foreground text-sm"
-								>
-									Source
-								</label>
+							<FormField
+								id={`${uid}-source`}
+								label="Source"
+								error={errors.source?.message}
+							>
 								<select
 									id={`${uid}-source`}
 									className="w-full rounded-lg border border-input px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
@@ -221,16 +291,13 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 										</option>
 									))}
 								</select>
-							</div>
+							</FormField>
 
-							{/* Score */}
-							<div>
-								<label
-									htmlFor={`${uid}-score`}
-									className="mb-2 block font-medium text-foreground text-sm"
-								>
-									Score: {watchScore}
-								</label>
+							<FormField
+								id={`${uid}-score`}
+								label={`Score: ${watchScore}`}
+								error={errors.score?.message}
+							>
 								<input
 									id={`${uid}-score`}
 									type="range"
@@ -249,25 +316,13 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									}
 									data-testid="score-input"
 								/>
-								{errors.score && (
-									<p
-										id={`${uid}-score-error`}
-										className="mt-1 text-destructive text-sm"
-										role="alert"
-									>
-										{errors.score.message}
-									</p>
-								)}
-							</div>
+							</FormField>
 
-							{/* Status */}
-							<div>
-								<label
-									htmlFor={`${uid}-status`}
-									className="mb-2 block font-medium text-foreground text-sm"
-								>
-									Status
-								</label>
+							<FormField
+								id={`${uid}-status`}
+								label="Status"
+								error={errors.status?.message}
+							>
 								<select
 									id={`${uid}-status`}
 									className="w-full rounded-lg border border-input px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
@@ -282,43 +337,14 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 											</option>
 										))}
 								</select>
-							</div>
+							</FormField>
 
-							{/* Actions */}
-							<div className="flex gap-3 pt-4">
-								<Button
-									type="submit"
-									disabled={isSubmitting || !isDirty}
-									className="flex-1"
-									aria-describedby="submit-status"
-									data-testid="submit-button"
-								>
-									{isSubmitting ? (
-										<div className="mr-2 h-4 w-4 animate-spin rounded-full border-white border-b-2" />
-									) : (
-										<Save className="mr-2 h-4 w-4" />
-									)}
-									Add Lead
-								</Button>
-								<Button
-									type="button"
-									variant="outline"
-									onClick={handleClose}
-									className="flex-1"
-								>
-									<XCircle className="mr-2 h-4 w-4" />
-									Cancel
-								</Button>
-							</div>
-
-							{isSubmitting && (
-								<p
-									id={`${uid}-submit-status`}
-									className="text-center text-muted-foreground text-sm"
-								>
-									Adding lead...
-								</p>
-							)}
+							<FormActions
+								isSubmitting={isSubmitting}
+								isDirty={isDirty}
+								onSubmit={handleSubmit(onSubmit)}
+								onCancel={handleClose}
+							/>
 						</form>
 					</div>
 				</div>
