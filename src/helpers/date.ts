@@ -1,4 +1,3 @@
-// Date utility functions using date-fns for consistent date handling across the application
 import {
 	addDays,
 	addMonths,

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
+import { apiService } from "@/domain/infra/http";
 import { useAppActions, useError, useLoading } from "@/domain/infra/store";
 import { dataSeeder } from "@/domain/services/data-seeder";
-import { api } from "@/helpers/api";
 
 export function useDataLoader() {
 	const { setLeads, setOpportunities, setLoading, setError } = useAppActions();
@@ -16,10 +16,10 @@ export function useDataLoader() {
 
 				await dataSeeder.seedInitialData();
 
-				const leads = await api.getLeads();
+				const leads = await apiService.getLeads();
 				setLeads(leads);
 
-				const opportunities = await api.getOpportunities();
+				const opportunities = await apiService.getOpportunities();
 				setOpportunities(opportunities);
 			} catch (err) {
 				setError(err instanceof Error ? err.message : "Failed to load data");
