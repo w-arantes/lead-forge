@@ -83,21 +83,23 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 						}}
 					>
 						{/* Header */}
-						<div className="flex items-center justify-between border-b p-6">
-							<h2
-								className="font-semibold text-foreground text-lg"
-								id={`${uid}-modal-title`}
-							>
-								Add New Lead
-							</h2>
-							<button
-								onClick={handleClose}
-								className="rounded-lg p-2 transition-colors hover:bg-muted"
-								type="button"
-								aria-label="Close modal"
-							>
-								<X className="h-5 w-5" />
-							</button>
+						<div className="border-b p-6">
+							<div className="mb-2 flex items-center justify-between">
+								<h2
+									className="font-semibold text-foreground text-lg"
+									id={`${uid}-modal-title`}
+								>
+									Add New Lead
+								</h2>
+								<button
+									onClick={handleClose}
+									className="rounded-lg p-2 transition-colors hover:bg-muted"
+									type="button"
+									aria-label="Close modal"
+								>
+									<X className="h-5 w-5" />
+								</button>
+							</div>
 						</div>
 
 						{/* Form */}

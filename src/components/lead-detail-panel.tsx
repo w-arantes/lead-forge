@@ -174,7 +174,7 @@ export function LeadDetailPanel({
 									<div>
 										<h2 className="font-medium text-lg">Lead Details</h2>
 										<p className="mt-1 text-primary-foreground/70 text-xs">
-											Press Esc to close • Ctrl+Enter to submit
+											Press Esc to close
 										</p>
 									</div>
 									<button
