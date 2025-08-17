@@ -101,8 +101,7 @@ export const urlSchema = z
 /**
  * Helper function to validate date format
  */
-export const dateSchema = z
-	.string()
+export const dateSchema = z.iso
 	.datetime("Invalid date format")
 	.refine(
 		(date) => new Date(date) <= new Date(),
