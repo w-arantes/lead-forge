@@ -1,7 +1,7 @@
 import leadsData from "@/data/leads.json";
 import { storage } from "@/domain/infra/storage";
 import type { Lead } from "@/domain/models";
-import { LEAD_SOURCES_ARRAY, LEAD_STATUSES_ARRAY } from "@/domain/models";
+import { LEAD_SOURCES_ARRAY, LEAD_STATUSES } from "@/domain/models";
 
 export class DataSeeder {
 	private static instance: DataSeeder;
@@ -53,7 +53,13 @@ export class DataSeeder {
 		const email = `lead${i}@example.com`;
 		const source = LEAD_SOURCES_ARRAY[i % LEAD_SOURCES_ARRAY.length];
 		const score = 50 + ((i * 7) % 51);
-		const status = LEAD_STATUSES_ARRAY[i % LEAD_STATUSES_ARRAY.length];
+
+		const availableStatuses = [
+			LEAD_STATUSES.NEW,
+			LEAD_STATUSES.QUALIFIED,
+			LEAD_STATUSES.HOT,
+		];
+		const status = availableStatuses[i % availableStatuses.length];
 
 		return {
 			id,
