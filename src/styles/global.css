@@ -327,14 +327,14 @@
 
 @media print {
 	* {
-		background: transparent !important;
-		color: black !important;
-		box-shadow: none !important;
-		text-shadow: none !important;
+		background: transparent;
+		color: black;
+		box-shadow: none;
+		text-shadow: none;
 	}
 
 	.dark * {
-		color: black !important;
+		color: black;
 	}
 }
 

@@ -1,7 +1,7 @@
 import { Keyboard } from "lucide-react";
 import { useEffect, useState } from "react";
+import { ShortcutsDialog } from "@/components/features/shortcuts-dialog";
 import { Button } from "@/components/ui/button";
-import { ShortcutsDialog } from "./shortcuts-dialog";
 
 export function ShortcutsButton() {
 	const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
@@ -19,10 +19,6 @@ export function ShortcutsButton() {
 	}, []);
 
 	const handleClick = () => {
-		console.log(
-			"Shortcuts button clicked, setting isOpen to:",
-			!isShortcutsOpen,
-		);
 		setIsShortcutsOpen(!isShortcutsOpen);
 	};
 
@@ -44,7 +40,6 @@ export function ShortcutsButton() {
 			<ShortcutsDialog
 				isOpen={isShortcutsOpen}
 				onClose={() => {
-					console.log("Closing shortcuts dialog");
 					setIsShortcutsOpen(false);
 				}}
 			/>

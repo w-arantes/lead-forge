@@ -1,12 +1,12 @@
 import { useId } from "react";
 import { AddLeadModal } from "@/components/add-lead-modal";
 import { Analytics } from "@/components/analytics";
+import { ShortcutsToggle } from "@/components/features/shortcuts-toggle";
 import { DashboardTabs, Header, ThemeToggle } from "@/components/layout";
 import { LeadDetailPanel } from "@/components/lead-detail-panel";
 import { LeadsTable } from "@/components/leads-table";
 import { OpportunitiesTable } from "@/components/opportunities-table";
 import { StatsCards } from "@/components/stats-cards";
-import { ShortcutsToggle } from "@/components/ui/shortcuts-toggle";
 import { ToastContainer } from "@/components/ui/toast";
 import { storage } from "@/domain/infra/storage";
 import {
@@ -51,11 +51,9 @@ export function Dashboard() {
 	const { toasts, removeToast, showSuccessToast, showErrorToast } =
 		useToastManager();
 
-	// Get services directly from the service factory
 	const services = getServices();
 	const leadUseCases = services.getLeadUseCases();
 
-	// Get data from store
 	const leads = useLeads();
 	const opportunities = useOpportunities();
 
@@ -170,11 +168,15 @@ export function Dashboard() {
 
 	return (
 		<div className="min-h-screen animate-fadeIn bg-background">
-			<Header
-				title="Lead Forge"
-				rightSlot={<ThemeToggle />}
-				isHidden={isHeaderHidden}
-			/>
+			<Header isHidden={isHeaderHidden}>
+				<Header.Left>
+					<Header.Title>Lead Forge</Header.Title>
+					<Header.Logo />
+				</Header.Left>
+				<Header.RightSlot>
+					<ThemeToggle />
+				</Header.RightSlot>
+			</Header>
 
 			<main className="mx-auto max-w-7xl px-4 pt-28 pb-12 sm:px-6 lg:px-8">
 				{loading ? (

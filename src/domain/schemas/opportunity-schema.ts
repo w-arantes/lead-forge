@@ -30,12 +30,8 @@ export const OpportunityFormSchema = z.object({
 			/^[a-zA-Z0-9\s\-'.&]+$/,
 			"Account name can only contain letters, numbers, spaces, hyphens, apostrophes, periods, and ampersands",
 		),
-	convertedFrom: z
-		.string()
-		.min(1, "Lead ID is required")
-		.uuid("Invalid lead ID format"),
-	convertedAt: z
-		.string()
+	convertedFrom: z.uuid("Invalid lead ID format"),
+	convertedAt: z.iso
 		.datetime("Invalid date format")
 		.refine(
 			(date) => new Date(date) <= new Date(),

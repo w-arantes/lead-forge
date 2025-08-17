@@ -14,9 +14,10 @@ import {
 	X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { LeadsTableSkeleton } from "@/components/features/table-skeleton";
 import { Button } from "@/components/ui/button";
-import { LeadsTableSkeleton } from "@/components/ui/table-skeleton";
 import type { Lead, LeadFilters } from "@/domain/models";
+import { getStatusColor } from "@/domain/models";
 import { dateUtils } from "@/helpers/date";
 
 interface LeadsTableProps {
@@ -328,15 +329,7 @@ export function LeadsTable({
 									</td>
 									<td className="px-6 py-4">
 										<span
-											className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-medium text-xs ${
-												lead.status === "Hot"
-													? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
-													: lead.status === "Qualified"
-														? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"
-														: lead.status === "Converted"
-															? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-															: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300"
-											}`}
+											className={`inline-flex items-center rounded-full px-2.5 py-0.5 font-medium text-xs ${getStatusColor(lead.status)}`}
 										>
 											{lead.status}
 										</span>

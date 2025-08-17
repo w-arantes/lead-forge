@@ -20,7 +20,6 @@ export function Skeleton({ className, width, height }: SkeletonProps) {
 	);
 }
 
-// Predefined skeleton components for common use cases
 export function SkeletonText({
 	className,
 	lines = 1,

@@ -40,10 +40,8 @@ export function Toast({
 	const [isExiting, setIsExiting] = useState(false);
 
 	useEffect(() => {
-		// Show toast with animation
 		const showTimer = setTimeout(() => setIsVisible(true), 100);
 
-		// Auto-hide toast
 		const hideTimer = setTimeout(() => {
 			setIsExiting(true);
 			setTimeout(() => onClose(id), 300);
@@ -95,7 +93,6 @@ export function Toast({
 				</button>
 			</div>
 
-			{/* Progress bar */}
 			<div
 				className="absolute bottom-0 left-0 h-1 rounded-b-lg bg-current opacity-20 transition-all duration-300 ease-linear"
 				style={{ width: isExiting ? "0%" : "100%" }}

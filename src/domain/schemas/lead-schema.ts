@@ -68,7 +68,7 @@ export const LeadFormSchema = z.object({
 	status: z.enum(leadStatuses as [string, ...string[]], {
 		message: "Please select a valid status",
 	}),
-	createdAt: z.string().datetime().optional(),
+	createdAt: z.iso.datetime("Invalid date format").optional(),
 });
 
 export const LeadUpdateSchema = z.object({

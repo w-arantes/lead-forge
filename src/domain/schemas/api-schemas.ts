@@ -44,7 +44,7 @@ export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(
 export const CreateLeadRequestSchema = LeadFormSchema;
 export const CreateLeadResponseSchema = ApiResponseSchema.extend({
 	data: z.object({
-		id: z.string().uuid(),
+		id: z.uuid(),
 		...LeadFormSchema.shape,
 		createdAt: z.iso.datetime(),
 		updatedAt: z.iso.datetime(),
@@ -54,7 +54,7 @@ export const CreateLeadResponseSchema = ApiResponseSchema.extend({
 export const UpdateLeadRequestSchema = LeadUpdateSchema;
 export const UpdateLeadResponseSchema = ApiResponseSchema.extend({
 	data: z.object({
-		id: z.string().uuid(),
+		id: z.uuid(),
 		...LeadUpdateSchema.shape,
 		updatedAt: z.iso.datetime(),
 	}),
@@ -66,7 +66,7 @@ export const GetLeadRequestSchema = z.object({
 
 export const GetLeadResponseSchema = ApiResponseSchema.extend({
 	data: z.object({
-		id: z.string().uuid(),
+		id: z.uuid(),
 		name: z.string(),
 		company: z.string(),
 		email: z.string().email(),
@@ -102,7 +102,7 @@ export const GetLeadsRequestSchema = z.object({
 
 export const GetLeadsResponseSchema = PaginatedResponseSchema(
 	z.object({
-		id: z.string().uuid(),
+		id: z.uuid(),
 		name: z.string(),
 		company: z.string(),
 		email: z.string().email(),
@@ -121,7 +121,7 @@ export const DeleteLeadRequestSchema = z.object({
 export const DeleteLeadResponseSchema = ApiResponseSchema.extend({
 	data: z.object({
 		deleted: z.boolean(),
-		id: z.string().uuid(),
+		id: z.uuid(),
 	}),
 });
 
@@ -155,7 +155,7 @@ export const GetOpportunityResponseSchema = ApiResponseSchema.extend({
 		stage: z.string(),
 		amount: z.number().positive(),
 		accountName: z.string(),
-		convertedFrom: z.string().uuid(),
+		convertedFrom: z.uuid(),
 		convertedAt: z.iso.datetime(),
 		createdAt: z.iso.datetime(),
 		updatedAt: z.iso.datetime(),
@@ -181,7 +181,7 @@ export const GetOpportunitiesResponseSchema = PaginatedResponseSchema(
 		stage: z.string(),
 		amount: z.number().positive(),
 		accountName: z.string(),
-		convertedFrom: z.string().uuid(),
+		convertedFrom: z.uuid(),
 		convertedAt: z.iso.datetime(),
 		createdAt: z.iso.datetime(),
 		updatedAt: z.iso.datetime(),
@@ -208,7 +208,7 @@ export const ConvertLeadResponseSchema = ApiResponseSchema.extend({
 			stage: z.string(),
 			amount: z.number().positive(),
 			accountName: z.string(),
-			convertedFrom: z.string().uuid(),
+			convertedFrom: z.uuid(),
 			convertedAt: z.iso.datetime(),
 			createdAt: z.iso.datetime(),
 		}),

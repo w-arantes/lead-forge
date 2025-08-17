@@ -1,8 +1,8 @@
-import { Skeleton } from "./skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const STATS_SKELETON_KEYS = Array.from(
 	{ length: 4 },
-	(_, i) => `stats-skel-${i}-${Date.now()}`,
+	(_, i) => `stats-skeleton-${i}-${Date.now()}`,
 );
 
 export function StatsCardsSkeleton() {

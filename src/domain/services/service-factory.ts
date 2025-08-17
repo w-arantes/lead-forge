@@ -1,19 +1,16 @@
 import { LeadRepositoryImpl } from "@/domain/repositories/lead-repository-impl";
 import { OpportunityRepositoryImpl } from "@/domain/repositories/opportunity-repository-impl";
-import { LeadUseCases, OpportunityUseCases } from "@/domain/usecases";
+import { LeadUseCases, OpportunityUseCases } from "@/domain/use-cases";
 
-// Service factory following dependency injection principles
 export class ServiceFactory {
 	private static instance: ServiceFactory;
 	private leadUseCases: LeadUseCases;
 	private opportunityUseCases: OpportunityUseCases;
 
 	private constructor() {
-		// Create repository instances
 		const leadRepository = new LeadRepositoryImpl();
 		const opportunityRepository = new OpportunityRepositoryImpl();
 
-		// Create use case instances with dependencies
 		this.leadUseCases = new LeadUseCases(leadRepository, opportunityRepository);
 		this.opportunityUseCases = new OpportunityUseCases(opportunityRepository);
 	}
@@ -34,5 +31,4 @@ export class ServiceFactory {
 	}
 }
 
-// Convenience function to get services
 export const getServices = () => ServiceFactory.getInstance();

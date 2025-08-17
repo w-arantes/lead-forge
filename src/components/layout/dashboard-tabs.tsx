@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
 import { useShortcutsEnabled } from "@/domain/infra/store";
 import { cn } from "@/lib/utils";
@@ -68,18 +69,19 @@ export function DashboardTabs({
 
 			<nav className="-mb-px flex space-x-8 px-6" aria-label="Dashboard Tabs">
 				{tabs.map((tab) => (
-					<button
+					<Button
 						key={tab.id}
-						type="button"
+						variant="ghost"
+						size="sm"
 						role="tab"
 						id={idPrefix ? `${idPrefix}-tab-${tab.id}` : undefined}
 						aria-selected={active === tab.id}
 						aria-controls={idPrefix ? `${idPrefix}-panel-${tab.id}` : undefined}
 						className={cn(
-							"cursor-pointer border-b-2 px-1 py-4 font-medium text-sm transition-colors",
+							"h-auto rounded-none border-b-2 px-1 py-4 font-medium text-sm transition-colors",
 							active === tab.id
-								? "border-primary text-primary"
-								: "border-transparent text-muted-foreground hover:border-border hover:text-foreground",
+								? "border-primary bg-transparent text-primary hover:bg-transparent"
+								: "border-transparent text-muted-foreground hover:border-border hover:bg-transparent hover:text-foreground",
 						)}
 						onClick={() => onChange(tab.id)}
 						data-testid={`tab-${tab.id}`}
@@ -90,7 +92,7 @@ export function DashboardTabs({
 								<Kbd className="text-xs">{tab.shortcut}</Kbd>
 							</span>
 						)}
-					</button>
+					</Button>
 				))}
 			</nav>
 		</div>

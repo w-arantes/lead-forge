@@ -3,18 +3,51 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface HeaderProps {
-	title: string;
-	rightSlot?: ReactNode;
+	children: ReactNode;
 	isHidden?: boolean;
 	className?: string;
 }
 
-export function Header({
-	title,
-	rightSlot,
-	isHidden = false,
-	className,
-}: HeaderProps) {
+interface HeaderLogoProps {
+	className?: string;
+}
+
+interface HeaderTitleProps {
+	children: ReactNode;
+	className?: string;
+}
+
+interface HeaderLeftProps {
+	children: ReactNode;
+	className?: string;
+}
+
+interface HeaderRightSlotProps {
+	children: ReactNode;
+	className?: string;
+}
+
+function HeaderLogo({ className }: HeaderLogoProps) {
+	return <AnvilIcon className={cn("size-6", className)} data-testid="logo" />;
+}
+
+function HeaderTitle({ children, className }: HeaderTitleProps) {
+	return <h1 className={cn("font-bold text-2xl", className)}>{children}</h1>;
+}
+
+function HeaderLeft({ children, className }: HeaderLeftProps) {
+	return (
+		<div className={cn("flex items-center gap-3", className)}>{children}</div>
+	);
+}
+
+function HeaderRightSlot({ children, className }: HeaderRightSlotProps) {
+	return (
+		<div className={cn("flex items-center gap-2", className)}>{children}</div>
+	);
+}
+
+export function Header({ children, isHidden = false, className }: HeaderProps) {
 	return (
 		<header
 			className={cn(
@@ -33,16 +66,15 @@ export function Header({
 			>
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 					<div className="flex items-center justify-between py-3">
-						<div className="flex items-center gap-3">
-							<h1 className="font-bold text-2xl">{title}</h1>
-							<AnvilIcon className="size-6" data-testid="logo" />
-						</div>
-						<div className="flex items-center gap-2">
-							{rightSlot ? <div>{rightSlot}</div> : null}
-						</div>
+						{children}
 					</div>
 				</div>
 			</div>
 		</header>
 	);
 }
+
+Header.Logo = HeaderLogo;
+Header.Title = HeaderTitle;
+Header.Left = HeaderLeft;
+Header.RightSlot = HeaderRightSlot;
