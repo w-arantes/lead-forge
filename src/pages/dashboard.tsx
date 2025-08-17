@@ -1,23 +1,22 @@
 import { useId } from "react";
-import { Header, DashboardTabs, ThemeToggle } from "@/components/layout";
-import { Analytics } from "@/components/analytics";
 import { AddLeadModal } from "@/components/add-lead-modal";
+import { Analytics } from "@/components/analytics";
+import { DashboardTabs, Header, ThemeToggle } from "@/components/layout";
 import { LeadDetailPanel } from "@/components/lead-detail-panel";
 import { LeadsTable } from "@/components/leads-table";
 import { OpportunitiesTable } from "@/components/opportunities-table";
 import { StatsCards } from "@/components/stats-cards";
 import { ToastContainer } from "@/components/ui/toast";
-
+import { storage } from "@/domain/infra/storage";
 import {
-	useAppActions,
 	useActiveTab,
+	useAppActions,
 	useIsHeaderHidden,
 	useLeads,
 	useOpportunities,
 } from "@/domain/infra/store";
-import { getServices } from "@/domain/services/service-factory";
-
 import type { Lead, Opportunity } from "@/domain/models";
+import { getServices } from "@/domain/services/service-factory";
 
 import {
 	useDataLoader,
@@ -34,7 +33,7 @@ export function Dashboard() {
 
 	const activeTab = useActiveTab();
 	const isHeaderHidden = useIsHeaderHidden();
-	const { setActiveTab } = useAppActions();
+	const { setActiveTab, convertLead, addLead, updateLead } = useAppActions();
 
 	const { loading, error } = useDataLoader();
 	const { filters, handleFiltersChange } = useFilterManager();
@@ -44,6 +43,7 @@ export function Dashboard() {
 		isAddLeadModalOpen,
 		handleLeadSelect,
 		handleDetailPanelClose,
+		handleAddLeadModalOpen,
 		handleAddLeadModalClose,
 	} = useModalManager();
 
@@ -61,26 +61,47 @@ export function Dashboard() {
 	const safeLeads = Array.isArray(leads) ? leads : [];
 	const safeOpportunities = Array.isArray(opportunities) ? opportunities : [];
 
+	const handleExportLeads = () => {
+		try {
+			storage.exportLeadsToCSV(safeLeads);
+			showSuccessToast(
+				"Export Successful",
+				"Leads exported to CSV successfully",
+			);
+		} catch (err) {
+			showErrorToast(
+				"Export Failed",
+				err instanceof Error ? err.message : "Failed to export leads",
+			);
+		}
+	};
+
+	const handleExportOpportunities = () => {
+		try {
+			storage.exportOpportunitiesToCSV(safeOpportunities);
+			showSuccessToast(
+				"Export Successful",
+				"Opportunities exported to CSV successfully",
+			);
+		} catch (err) {
+			showErrorToast(
+				"Export Failed",
+				err instanceof Error ? err.message : "Failed to export opportunities",
+			);
+		}
+	};
+
 	const handleLeadConvertWithToast = async (
 		lead: Lead,
 		amount?: number,
 	): Promise<Opportunity> => {
 		try {
-			await leadUseCases.convertLeadToOpportunity(lead.id, amount);
+			const opportunity = await convertLead(lead, amount);
 			showSuccessToast(
 				"Lead Converted",
 				"Lead has been successfully converted to opportunity",
 			);
-			// Return a mock opportunity since the method returns the converted lead
-			return {
-				id: `opp_${Date.now()}`,
-				name: lead.name,
-				stage: "Prospecting",
-				amount,
-				accountName: lead.company,
-				convertedFrom: lead.id,
-				convertedAt: new Date().toISOString(),
-			} as Opportunity;
+			return opportunity;
 		} catch (err) {
 			showErrorToast(
 				"Conversion Failed",
@@ -96,6 +117,9 @@ export function Dashboard() {
 	) => {
 		try {
 			await leadUseCases.updateLead(leadId, updates);
+
+			updateLead(leadId, updates);
+
 			showSuccessToast(
 				"Lead Updated",
 				"Lead information has been updated successfully",
@@ -110,7 +134,10 @@ export function Dashboard() {
 
 	const handleAddLeadWithToast = async (leadData: Omit<Lead, "id">) => {
 		try {
-			await leadUseCases.createLead(leadData);
+			const newLead = await leadUseCases.createLead(leadData);
+
+			addLead(newLead);
+
 			showSuccessToast("Lead Added", "New lead has been added successfully");
 		} catch (err) {
 			showErrorToast(
@@ -152,7 +179,7 @@ export function Dashboard() {
 				{loading ? (
 					<div className="flex items-center justify-center py-20">
 						<div className="text-center">
-							<div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
+							<div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
 							<p className="text-muted-foreground">Loading dashboard data...</p>
 						</div>
 					</div>
@@ -163,7 +190,7 @@ export function Dashboard() {
 							opportunities={safeOpportunities}
 							loading={loading}
 							onFilterChange={(filter) => handleFiltersChange(filter)}
-							onExport={() => {}} // No export functionality in new structure
+							onExport={handleExportLeads}
 						/>
 
 						<div className="mt-8 rounded-xl border bg-card">
@@ -187,8 +214,8 @@ export function Dashboard() {
 											filters={filters}
 											onFiltersChange={handleFiltersChange}
 											loading={loading}
-											onAddLead={handleAddLeadModalClose}
-											onExport={() => {}} // No export functionality in new structure
+											onAddLead={handleAddLeadModalOpen}
+											onExport={handleExportLeads}
 										/>
 									</div>
 								)}
@@ -205,6 +232,7 @@ export function Dashboard() {
 											loading={loading}
 											leads={safeLeads}
 											onLeadSelect={handleLeadSelect}
+											onExport={handleExportOpportunities}
 										/>
 									</div>
 								)}

@@ -1,4 +1,4 @@
-import { Eye } from "lucide-react";
+import { Download, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OpportunitiesTableSkeleton } from "@/components/ui/table-skeleton";
 import type { Lead, Opportunity } from "@/domain/models";
@@ -9,6 +9,7 @@ interface OpportunitiesTableProps {
 	loading?: boolean;
 	leads: Lead[];
 	onLeadSelect: (lead: Lead) => void;
+	onExport?: () => void;
 }
 
 export function OpportunitiesTable({
@@ -16,6 +17,7 @@ export function OpportunitiesTable({
 	loading = false,
 	leads,
 	onLeadSelect,
+	onExport,
 }: OpportunitiesTableProps) {
 	const safeOpportunities = Array.isArray(opportunities) ? opportunities : [];
 	const safeLeads = Array.isArray(leads) ? leads : [];
@@ -37,27 +39,41 @@ export function OpportunitiesTable({
 	const getStageColor = (stage: string) => {
 		switch (stage) {
 			case "Closed Won":
-				return "bg-green-100 text-green-800";
+				return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300";
 			case "Closed Lost":
-				return "bg-red-100 text-red-800";
+				return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300";
 			case "Negotiation":
-				return "bg-purple-100 text-purple-800";
+				return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300";
 			case "Proposal":
-				return "bg-blue-100 text-blue-800";
+				return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300";
 			case "Qualification":
-				return "bg-yellow-100 text-yellow-800";
+				return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300";
 			default:
-				return "bg-gray-100 text-gray-800";
+				return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300";
 		}
 	};
 
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center justify-between">
-				<h2 className="font-medium text-gray-900 text-lg">Opportunities</h2>
-				<span className="text-muted-foreground text-sm">
-					{safeOpportunities.length} total
-				</span>
+				<div>
+					<h2 className="font-medium text-foreground text-lg">Opportunities</h2>
+					<span className="text-muted-foreground text-sm">
+						{safeOpportunities.length} total
+					</span>
+				</div>
+				{onExport && (
+					<Button
+						type="button"
+						onClick={onExport}
+						variant="outline"
+						size="sm"
+						className="gap-2"
+					>
+						<Download className="h-4 w-4" />
+						Export
+					</Button>
+				)}
 			</div>
 
 			<div className="overflow-x-auto rounded-lg border">
@@ -91,11 +107,11 @@ export function OpportunitiesTable({
 								}}
 							>
 								<td className="px-4 py-3">
-									<div className="font-medium text-gray-900">
+									<div className="font-medium text-foreground">
 										{opportunity.name}
 									</div>
 								</td>
-								<td className="px-4 py-3 text-gray-900">
+								<td className="px-4 py-3 text-foreground">
 									{opportunity.accountName}
 								</td>
 								<td className="px-4 py-3">
@@ -114,7 +130,7 @@ export function OpportunitiesTable({
 										<span className="text-muted-foreground">-</span>
 									)}
 								</td>
-								<td className="px-4 py-3 text-gray-500 text-sm">
+								<td className="px-4 py-3 text-muted-foreground text-sm">
 									{dateUtils.formatDate(opportunity.convertedAt)}
 								</td>
 								<td className="px-4 py-3">

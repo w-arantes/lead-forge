@@ -1,8 +1,12 @@
 import {
 	Activity,
+	AlertCircle,
+	ArrowRight,
 	BarChart3,
 	Calendar,
+	CheckCircle,
 	Clock,
+	DollarSign,
 	Target,
 	TrendingUp,
 	Users,
@@ -10,6 +14,7 @@ import {
 import { useMemo, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Lead, Opportunity } from "@/domain/models";
+import { LEAD_STATUSES, OPPORTUNITY_STAGES } from "@/domain/models/constants";
 import { dateUtils } from "@/helpers/date";
 
 interface AnalyticsProps {
@@ -23,6 +28,7 @@ type TabType =
 	| "leads"
 	| "opportunities"
 	| "conversion"
+	| "pipeline"
 	| "timeline";
 
 export function Analytics({
@@ -33,22 +39,46 @@ export function Analytics({
 	const [activeTab, setActiveTab] = useState<TabType>("overview");
 
 	const stats = useMemo(() => {
-		const totalLeads = leads.length;
-		const qualifiedLeads = leads.filter((l) => l.status === "Qualified").length;
-		const hotLeads = leads.filter((l) => l.status === "Hot").length;
-		const convertedLeads = leads.filter((l) => l.status === "Converted").length;
-		const newLeads = leads.filter((l) => l.status === "New").length;
+		const safeLeads = Array.isArray(leads) ? leads : [];
+		const safeOpportunities = Array.isArray(opportunities) ? opportunities : [];
 
-		const totalOpportunities = opportunities.length;
-		const totalValue = opportunities.reduce(
+		const totalLeads = safeLeads.length;
+		const qualifiedLeads = safeLeads.filter(
+			(l) => l.status === LEAD_STATUSES.QUALIFIED,
+		).length;
+		const hotLeads = safeLeads.filter(
+			(l) => l.status === LEAD_STATUSES.HOT,
+		).length;
+		const newLeads = safeLeads.filter(
+			(l) => l.status === LEAD_STATUSES.NEW,
+		).length;
+
+		const totalOpportunities = safeOpportunities.length;
+		const totalValue = safeOpportunities.reduce(
 			(sum, opp) => sum + (opp.amount || 0),
 			0,
 		);
 
 		const conversionRate =
-			totalLeads > 0 ? (convertedLeads / totalLeads) * 100 : 0;
+			totalLeads > 0 ? (totalOpportunities / totalLeads) * 100 : 0;
 
-		const leadsBySource = leads.reduce(
+		const pipelineByStage = safeOpportunities.reduce(
+			(acc, opp) => {
+				acc[opp.stage] = (acc[opp.stage] || 0) + 1;
+				return acc;
+			},
+			{} as Record<string, number>,
+		);
+
+		const pipelineValueByStage = safeOpportunities.reduce(
+			(acc, opp) => {
+				acc[opp.stage] = (acc[opp.stage] || 0) + (opp.amount || 0);
+				return acc;
+			},
+			{} as Record<string, number>,
+		);
+
+		const leadsBySource = safeLeads.reduce(
 			(acc, lead) => {
 				acc[lead.source] = (acc[lead.source] || 0) + 1;
 				return acc;
@@ -56,7 +86,7 @@ export function Analytics({
 			{} as Record<string, number>,
 		);
 
-		const leadsByStatus = leads.reduce(
+		const leadsByStatus = safeLeads.reduce(
 			(acc, lead) => {
 				acc[lead.status] = (acc[lead.status] || 0) + 1;
 				return acc;
@@ -65,51 +95,65 @@ export function Analytics({
 		);
 
 		const avgScore =
-			leads.length > 0
-				? leads.reduce((sum, lead) => sum + lead.score, 0) / leads.length
+			totalLeads > 0
+				? safeLeads.reduce((sum, lead) => sum + lead.score, 0) / totalLeads
 				: 0;
 
 		const now = new Date();
-
-		const leadsThisMonth = leads.filter((l) =>
+		const leadsThisMonth = safeLeads.filter((l) =>
 			dateUtils.isThisMonth(l.createdAt),
 		).length;
-		const leadsThisWeek = leads.filter((l) =>
+		const leadsThisWeek = safeLeads.filter((l) =>
 			dateUtils.isThisWeek(l.createdAt),
 		).length;
-		const leadsToday = leads.filter((l) =>
+		const leadsToday = safeLeads.filter((l) =>
 			dateUtils.isToday(l.createdAt),
 		).length;
 
+		const opportunitiesThisMonth = safeOpportunities.filter((opp) =>
+			dateUtils.isThisMonth(opp.convertedAt),
+		).length;
+
 		const avgLeadAge =
-			leads.length > 0
-				? leads.reduce(
+			totalLeads > 0
+				? safeLeads.reduce(
 						(sum, l) => sum + dateUtils.getDaysBetween(l.createdAt, now),
 						0,
-					) / leads.length
+					) / totalLeads
 				: 0;
 
-		const recentActivity = leads.filter(
+		const recentActivity = safeLeads.filter(
 			(l) => dateUtils.getDaysBetween(l.createdAt, now) <= 7,
 		).length;
+
+		const conversionFunnel = {
+			totalLeads,
+			qualifiedLeads,
+			hotLeads,
+			convertedToOpportunities: totalOpportunities,
+			conversionRate,
+		};
 
 		return {
 			totalLeads,
 			qualifiedLeads,
 			hotLeads,
-			convertedLeads,
 			newLeads,
 			totalOpportunities,
 			totalValue,
 			conversionRate,
 			leadsBySource,
 			leadsByStatus,
+			pipelineByStage,
+			pipelineValueByStage,
 			avgScore,
 			leadsThisMonth,
 			leadsThisWeek,
 			leadsToday,
+			opportunitiesThisMonth,
 			avgLeadAge,
 			recentActivity,
+			conversionFunnel,
 		};
 	}, [leads, opportunities]);
 
@@ -118,6 +162,7 @@ export function Analytics({
 		{ id: "leads", label: "Leads Analysis", icon: Users },
 		{ id: "opportunities", label: "Opportunities", icon: Target },
 		{ id: "conversion", label: "Conversion", icon: TrendingUp },
+		{ id: "pipeline", label: "Pipeline", icon: DollarSign },
 		{ id: "timeline", label: "Timeline", icon: Calendar },
 	];
 
@@ -134,18 +179,7 @@ export function Analytics({
 							<div className="mt-1 flex items-center gap-1">
 								<TrendingUp className="h-3 w-3 text-green-500" />
 								<span className="text-green-600 text-xs dark:text-green-400">
-									+
-									{
-										leads.filter((l) => {
-											const leadDate = new Date(l.createdAt);
-											const currentMonth = new Date();
-											return (
-												leadDate.getMonth() === currentMonth.getMonth() &&
-												leadDate.getFullYear() === currentMonth.getFullYear()
-											);
-										}).length
-									}{" "}
-									this month
+									+{stats.leadsThisMonth} this month
 								</span>
 							</div>
 						</div>
@@ -163,18 +197,7 @@ export function Analytics({
 							<div className="mt-1 flex items-center gap-1">
 								<TrendingUp className="h-3 w-3 text-green-500" />
 								<span className="text-green-600 text-xs dark:text-green-400">
-									{opportunities.length > 0
-										? `${
-												opportunities.filter((opp) => {
-													const oppDate = new Date(opp.convertedAt);
-													const currentMonth = new Date();
-													return (
-														oppDate.getMonth() === currentMonth.getMonth() &&
-														oppDate.getFullYear() === currentMonth.getFullYear()
-													);
-												}).length
-											} converted this month`
-										: "No conversions yet"}
+									{stats.opportunitiesThisMonth} converted this month
 								</span>
 							</div>
 						</div>
@@ -189,6 +212,12 @@ export function Analytics({
 							<p className="font-bold text-2xl text-foreground">
 								${stats.totalValue.toLocaleString()}
 							</p>
+							<div className="mt-1 flex items-center gap-1">
+								<Target className="h-3 w-3 text-blue-500" />
+								<span className="text-blue-600 text-xs dark:text-blue-400">
+									{stats.totalOpportunities} opportunities
+								</span>
+							</div>
 						</div>
 						<Target className="h-8 w-8 text-blue-500" />
 					</div>
@@ -201,6 +230,12 @@ export function Analytics({
 							<p className="font-bold text-2xl text-foreground">
 								{stats.avgScore.toFixed(0)}
 							</p>
+							<div className="mt-1 flex items-center gap-1">
+								<Activity className="h-3 w-3 text-orange-500" />
+								<span className="text-orange-600 text-xs dark:text-orange-400">
+									{stats.hotLeads} hot leads
+								</span>
+							</div>
 						</div>
 						<Activity className="h-8 w-8 text-orange-500" />
 					</div>
@@ -213,6 +248,12 @@ export function Analytics({
 							<p className="font-bold text-2xl text-foreground">
 								{stats.leadsThisWeek}
 							</p>
+							<div className="mt-1 flex items-center gap-1">
+								<Calendar className="h-3 w-3 text-purple-500" />
+								<span className="text-purple-600 text-xs dark:text-purple-400">
+									{stats.leadsToday} today
+								</span>
+							</div>
 						</div>
 						<Calendar className="h-8 w-8 text-purple-500" />
 					</div>
@@ -225,6 +266,12 @@ export function Analytics({
 							<p className="font-bold text-2xl text-foreground">
 								{stats.recentActivity}
 							</p>
+							<div className="mt-1 flex items-center gap-1">
+								<Clock className="h-3 w-3 text-indigo-500" />
+								<span className="text-indigo-600 text-xs dark:text-indigo-400">
+									last 7 days
+								</span>
+							</div>
 						</div>
 						<Clock className="h-8 w-8 text-indigo-500" />
 					</div>
@@ -285,10 +332,289 @@ export function Analytics({
 		</div>
 	);
 
+	const renderPipeline = () => (
+		<div className="space-y-6">
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+				<div className="rounded-lg border border-border bg-card p-6">
+					<h3 className="mb-4 font-semibold text-foreground text-lg">
+						Pipeline by Stage
+					</h3>
+					<div className="space-y-4">
+						{Object.entries(OPPORTUNITY_STAGES).map(([, stage]) => {
+							const count = stats.pipelineByStage[stage] || 0;
+							const value = stats.pipelineValueByStage[stage] || 0;
+							const percentage =
+								stats.totalOpportunities > 0
+									? (count / stats.totalOpportunities) * 100
+									: 0;
+
+							return (
+								<div key={stage} className="space-y-2">
+									<div className="flex items-center justify-between">
+										<span className="text-muted-foreground text-sm capitalize">
+											{stage}
+										</span>
+										<div className="flex items-center gap-2">
+											<span className="font-medium text-foreground text-sm">
+												{count}
+											</span>
+											<span className="text-muted-foreground text-xs">
+												({percentage.toFixed(1)}%)
+											</span>
+										</div>
+									</div>
+									<div className="h-2 w-full rounded-full bg-muted">
+										<div
+											className="h-2 rounded-full bg-blue-500 transition-all duration-300"
+											style={{ width: `${percentage}%` }}
+										/>
+									</div>
+									{value > 0 && (
+										<p className="text-muted-foreground text-xs">
+											${value.toLocaleString()} value
+										</p>
+									)}
+								</div>
+							);
+						})}
+					</div>
+				</div>
+
+				<div className="rounded-lg border border-border bg-card p-6">
+					<h3 className="mb-4 font-semibold text-foreground text-lg">
+						Conversion Funnel
+					</h3>
+					<div className="space-y-4">
+						<div className="flex items-center justify-between">
+							<div className="flex items-center gap-2">
+								<Users className="h-4 w-4 text-blue-500" />
+								<span className="text-sm">Total Leads</span>
+							</div>
+							<span className="font-medium">{stats.totalLeads}</span>
+						</div>
+
+						<ArrowRight className="mx-auto h-4 w-4 text-muted-foreground" />
+
+						<div className="flex items-center justify-between">
+							<div className="flex items-center gap-2">
+								<CheckCircle className="h-4 w-4 text-green-500" />
+								<span className="text-sm">Qualified</span>
+							</div>
+							<span className="font-medium">{stats.qualifiedLeads}</span>
+						</div>
+
+						<ArrowRight className="mx-auto h-4 w-4 text-muted-foreground" />
+
+						<div className="flex items-center justify-between">
+							<div className="flex items-center gap-2">
+								<AlertCircle className="h-4 w-4 text-orange-500" />
+								<span className="text-sm">Hot</span>
+							</div>
+							<span className="font-medium">{stats.hotLeads}</span>
+						</div>
+
+						<ArrowRight className="mx-auto h-4 w-4 text-muted-foreground" />
+
+						<div className="flex items-center justify-between">
+							<div className="flex items-center gap-2">
+								<Target className="h-4 w-4 text-purple-500" />
+								<span className="text-sm">Converted</span>
+							</div>
+							<span className="font-medium">{stats.totalOpportunities}</span>
+						</div>
+
+						<div className="mt-4 border-border border-t pt-4">
+							<div className="flex items-center justify-between">
+								<span className="font-medium text-sm">Conversion Rate</span>
+								<span className="font-bold text-green-600 text-lg">
+									{stats.conversionRate.toFixed(1)}%
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+
+	const renderLeadsAnalysis = () => (
+		<div className="space-y-6">
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+				<div className="rounded-lg border border-border bg-card p-6">
+					<h3 className="mb-4 font-semibold text-foreground text-lg">
+						Leads by Source
+					</h3>
+					<div className="space-y-3">
+						{Object.entries(stats.leadsBySource).map(([source, count]) => (
+							<div key={source} className="flex items-center justify-between">
+								<span className="text-foreground">{source}</span>
+								<span className="font-medium text-foreground">{count}</span>
+							</div>
+						))}
+					</div>
+				</div>
+				<div className="rounded-lg border border-border bg-card p-6">
+					<h3 className="mb-4 font-semibold text-foreground text-lg">
+						Leads by Status
+					</h3>
+					<div className="space-y-3">
+						{Object.entries(stats.leadsByStatus).map(([status, count]) => (
+							<div key={status} className="flex items-center justify-between">
+								<span className="text-foreground">{status}</span>
+								<span className="font-medium text-foreground">{count}</span>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+
+	const renderOpportunitiesAnalysis = () => (
+		<div className="space-y-6">
+			<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+				<div className="rounded-lg border border-border bg-card p-6">
+					<h3 className="mb-4 font-semibold text-foreground text-lg">
+						Pipeline by Stage
+					</h3>
+					<div className="space-y-3">
+						{Object.entries(stats.pipelineByStage).map(([stage, count]) => (
+							<div key={stage} className="flex items-center justify-between">
+								<span className="text-foreground">{stage}</span>
+								<span className="font-medium text-foreground">{count}</span>
+							</div>
+						))}
+					</div>
+				</div>
+				<div className="rounded-lg border border-border bg-card p-6">
+					<h3 className="mb-4 font-semibold text-foreground text-lg">
+						Pipeline Value by Stage
+					</h3>
+					<div className="space-y-3">
+						{Object.entries(stats.pipelineValueByStage).map(
+							([stage, value]) => (
+								<div key={stage} className="flex items-center justify-between">
+									<span className="text-foreground">{stage}</span>
+									<span className="font-medium text-green-600">
+										${value.toLocaleString()}
+									</span>
+								</div>
+							),
+						)}
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+
+	const renderConversionAnalysis = () => (
+		<div className="space-y-6">
+			<div className="rounded-lg border border-border bg-card p-6">
+				<h3 className="mb-4 font-semibold text-foreground text-lg">
+					Conversion Funnel
+				</h3>
+				<div className="space-y-4">
+					<div className="flex items-center justify-between">
+						<span className="text-foreground">Total Leads</span>
+						<span className="font-medium text-foreground">
+							{stats.totalLeads}
+						</span>
+					</div>
+					<ArrowRight className="mx-auto h-4 w-4 text-muted-foreground" />
+					<div className="flex items-center justify-between">
+						<span className="text-foreground">Qualified</span>
+						<span className="font-medium text-foreground">
+							{stats.qualifiedLeads}
+						</span>
+					</div>
+					<ArrowRight className="mx-auto h-4 w-4 text-muted-foreground" />
+					<div className="flex items-center justify-between">
+						<span className="text-foreground">Hot</span>
+						<span className="font-medium text-foreground">
+							{stats.hotLeads}
+						</span>
+					</div>
+					<ArrowRight className="mx-auto h-4 w-4 text-muted-foreground" />
+					<div className="flex items-center justify-between">
+						<span className="text-foreground">Converted</span>
+						<span className="font-medium text-foreground">
+							{stats.totalOpportunities}
+						</span>
+					</div>
+					<div className="mt-4 border-border border-t pt-4">
+						<div className="flex items-center justify-between">
+							<span className="font-medium text-foreground text-sm">
+								Conversion Rate
+							</span>
+							<span className="font-bold text-green-600 text-lg">
+								{stats.conversionRate.toFixed(1)}%
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+
+	const renderTimeline = () => (
+		<div className="space-y-6">
+			<div className="rounded-lg border border-border bg-card p-6">
+				<h3 className="mb-4 font-semibold text-foreground text-lg">
+					Recent Activity
+				</h3>
+				<div className="space-y-4">
+					<div className="flex items-center gap-3">
+						<Clock className="h-4 w-4 text-muted-foreground" />
+						<div>
+							<p className="text-foreground text-sm">
+								{stats.leadsThisMonth} leads added this month
+							</p>
+							<p className="text-muted-foreground text-xs">
+								{stats.leadsThisWeek} this week, {stats.leadsToday} today
+							</p>
+						</div>
+					</div>
+					<div className="flex items-center gap-3">
+						<Target className="h-4 w-4 text-muted-foreground" />
+						<div>
+							<p className="text-foreground text-sm">
+								{stats.opportunitiesThisMonth} opportunities created this month
+							</p>
+							<p className="text-foreground text-xs">
+								Pipeline value: ${stats.totalValue.toLocaleString()}
+							</p>
+						</div>
+					</div>
+					<div className="flex items-center gap-3">
+						<TrendingUp className="h-4 w-4 text-muted-foreground" />
+						<div>
+							<p className="text-foreground text-sm">
+								Average lead score: {stats.avgScore.toFixed(0)}
+							</p>
+							<p className="text-foreground text-xs">
+								{stats.hotLeads} hot leads, {stats.qualifiedLeads} qualified
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+
 	const renderTabContent = () => {
 		switch (activeTab) {
 			case "overview":
 				return renderOverview();
+			case "leads":
+				return renderLeadsAnalysis();
+			case "opportunities":
+				return renderOpportunitiesAnalysis();
+			case "conversion":
+				return renderConversionAnalysis();
+			case "pipeline":
+				return renderPipeline();
+			case "timeline":
+				return renderTimeline();
 			default:
 				return renderOverview();
 		}

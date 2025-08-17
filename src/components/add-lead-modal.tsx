@@ -4,12 +4,11 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import type { Lead, LeadSource, LeadStatus } from "@/domain/models";
+import { LEAD_SOURCES, LEAD_STATUSES } from "@/domain/models";
 import {
 	type LeadFormInput,
 	LeadFormSchema,
 	leadFormDefaults,
-	leadSources,
-	leadStatuses,
 } from "@/domain/schemas/lead-schema";
 import { dateUtils } from "@/helpers/date";
 
@@ -41,16 +40,20 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 	const onSubmit = async (data: LeadFormInput) => {
 		try {
 			const leadData: Omit<Lead, "id"> = {
-				...data,
+				name: data.name,
+				company: data.company,
+				email: data.email,
 				source: data.source as LeadSource,
+				score: data.score,
 				status: data.status as LeadStatus,
-				createdAt: data.createdAt || dateUtils.now(),
+				createdAt: dateUtils.now(),
 			};
 			await onAdd(leadData);
 			onClose();
 			reset(leadFormDefaults);
-		} catch {
-			// fail silently as before
+		} catch (error) {
+			console.error("Failed to add lead:", error);
+			throw error;
 		}
 	};
 
@@ -206,7 +209,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									className="w-full rounded-lg border border-input px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
 									{...register("source")}
 								>
-									{leadSources.map((source) => (
+									{Object.values(LEAD_SOURCES).map((source) => (
 										<option key={source} value={source}>
 											{source}
 										</option>
@@ -263,11 +266,13 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									className="w-full rounded-lg border border-input px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
 									{...register("status")}
 								>
-									{leadStatuses.map((status) => (
-										<option key={status} value={status}>
-											{status}
-										</option>
-									))}
+									{Object.values(LEAD_STATUSES)
+										.filter((status) => status !== LEAD_STATUSES.CONVERTED)
+										.map((status) => (
+											<option key={status} value={status}>
+												{status}
+											</option>
+										))}
 								</select>
 							</div>
 

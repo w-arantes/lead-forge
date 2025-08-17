@@ -1,13 +1,12 @@
 import type { ReactNode } from "react";
 import { useEffect } from "react";
-import {
-	STORAGE_KEYS,
-	THEME_VALUES,
-	DEFAULT_THEME,
-	THEME_CLASSES,
-} from "@/constants";
-
 import { ErrorBoundary } from "@/components/layout";
+import {
+	DEFAULT_THEME,
+	STORAGE_KEYS,
+	THEME_CLASSES,
+	THEME_VALUES,
+} from "@/constants";
 
 function getSystemTheme(): string {
 	return window.matchMedia("(prefers-color-scheme: dark)").matches

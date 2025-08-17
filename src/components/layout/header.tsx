@@ -1,3 +1,4 @@
+import { AnvilIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -33,6 +34,7 @@ export function Header({
 					<div className="flex items-center justify-between py-3">
 						<div className="flex items-center gap-3">
 							<h1 className="font-bold text-2xl">{title}</h1>
+							<AnvilIcon className="size-6" />
 						</div>
 						{rightSlot ? <div>{rightSlot}</div> : null}
 					</div>

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppActions, useError, useLoading } from "@/domain/infra/store";
-import { api } from "@/helpers/api";
 import { dataSeeder } from "@/domain/services/data-seeder";
+import { api } from "@/helpers/api";
 
 export function useDataLoader() {
 	const { setLeads, setOpportunities, setLoading, setError } = useAppActions();

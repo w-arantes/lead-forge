@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DollarSign, Edit3, Save, X, XCircle } from "lucide-react";
+import { Edit3, Save, X, XCircle } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import type { Lead, Opportunity, LeadStatus } from "@/domain/models";
+
+import type { Lead, LeadStatus, Opportunity } from "@/domain/models";
 import { LEAD_STATUSES } from "@/domain/models";
 import {
 	type ConvertToOpportunityInput,
@@ -51,15 +52,18 @@ export function LeadDetailPanel({
 	});
 
 	const {
-		register: registerConvert,
 		handleSubmit: handleConvertSubmit,
 		reset: resetConvert,
 		formState: { errors: convertErrors },
+		watch,
+		setValue,
 	} = useForm<ConvertToOpportunityInput>({
 		resolver: zodResolver(ConvertToOpportunitySchema),
 		defaultValues: { amount: undefined },
 		mode: "onBlur",
 	});
+
+	const amountValue = watch("amount");
 
 	useEffect(() => {
 		if (lead && isOpen) {
@@ -67,6 +71,19 @@ export function LeadDetailPanel({
 			resetConvert({ amount: undefined });
 		}
 	}, [lead, isOpen, resetEdit, resetConvert]);
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (!isOpen) return;
+
+			if (e.key === "Escape") {
+				onClose();
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [isOpen, onClose]);
 
 	if (!lead || !isOpen) return null;
 
@@ -103,10 +120,11 @@ export function LeadDetailPanel({
 		setIsConverting(true);
 		setError(null);
 		try {
-			const amount = data.amount ? Number(data.amount) : undefined;
+			const amount = data.amount ? parseFloat(data.amount) : undefined;
 			await onConvert(lead, amount);
+			setIsConverting(false);
+			resetConvert();
 			onClose();
-			resetConvert({ amount: undefined });
 		} catch (err) {
 			setError(err instanceof Error ? err.message : "Failed to convert lead");
 		} finally {
@@ -116,14 +134,16 @@ export function LeadDetailPanel({
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case LEAD_STATUSES.HOT:
-				return "bg-destructive/15 text-destructive dark:bg-destructive/25";
+			case LEAD_STATUSES.NEW:
+				return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300";
 			case LEAD_STATUSES.QUALIFIED:
-				return "bg-secondary/15 text-secondary dark:bg-secondary/25";
+				return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300";
+			case LEAD_STATUSES.HOT:
+				return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300";
 			case LEAD_STATUSES.CONVERTED:
-				return "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300";
+				return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300";
 			default:
-				return "bg-muted text-foreground/80";
+				return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300";
 		}
 	};
 
@@ -148,7 +168,12 @@ export function LeadDetailPanel({
 							{/* Header */}
 							<div className="bg-primary px-4 py-6 text-primary-foreground sm:px-6">
 								<div className="flex items-center justify-between">
-									<h2 className="font-medium text-lg">Lead Details</h2>
+									<div>
+										<h2 className="font-medium text-lg">Lead Details</h2>
+										<p className="mt-1 text-primary-foreground/70 text-xs">
+											Press Esc to close • Ctrl+Enter to submit
+										</p>
+									</div>
 									<button
 										type="button"
 										onClick={onClose}
@@ -209,7 +234,7 @@ export function LeadDetailPanel({
 																? `${uid}-edit-email-error`
 																: undefined
 														}
-														className="mt-1 block w-full rounded-md border-input bg-background shadow-sm focus:border-ring focus:ring-ring sm:text-sm"
+														className="mt-1 block h-10 w-full rounded-lg border-input bg-background px-3 shadow-sm focus:border-ring focus:ring-ring sm:text-sm"
 														{...register("email")}
 													/>
 													{editErrors.email && (
@@ -268,7 +293,7 @@ export function LeadDetailPanel({
 																? `${uid}-edit-status-error`
 																: undefined
 														}
-														className="mt-1 block w-full rounded-md border-input bg-background shadow-sm focus:border-ring focus:ring-ring sm:text-sm"
+														className="mt-1 block h-10 w-full rounded-lg border-input bg-background px-3 shadow-sm focus:border-ring focus:ring-ring sm:text-sm"
 														{...register("status")}
 													>
 														<option value={LEAD_STATUSES.NEW}>
@@ -354,25 +379,35 @@ export function LeadDetailPanel({
 												className="space-y-4"
 											>
 												<div>
-													<div className="block text-muted-foreground text-sm">
+													<label
+														htmlFor={`${uid}-convert-amount`}
+														className="block text-muted-foreground text-sm"
+													>
 														Amount (Optional)
-													</div>
+													</label>
+
 													<div className="relative mt-1">
-														<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-															<DollarSign className="h-5 w-5 text-muted-foreground" />
-														</div>
 														<input
-															inputMode="decimal"
-															placeholder="0.00"
-															className="block w-full rounded-md border-input bg-background pl-10 shadow-sm focus:border-ring focus:ring-ring sm:text-sm"
+															id={`${uid}-convert-amount`}
+															type="number"
+															step="0.01"
+															min="0"
+															placeholder="Enter amount (e.g., 1500.00)"
+															value={amountValue || ""}
+															onChange={(e) =>
+																setValue("amount", e.target.value)
+															}
 															aria-invalid={!!convertErrors.amount}
 															aria-describedby={
 																convertErrors.amount
 																	? `${uid}-convert-amount-error`
 																	: undefined
 															}
-															{...registerConvert("amount")}
+															className="block h-10 w-full rounded-lg border-input bg-background px-3 pr-12 shadow-sm transition-colors focus:border-ring focus:ring-ring sm:text-sm"
 														/>
+														<div className="-translate-y-1/2 pointer-events-none absolute top-1/2 right-3 font-medium text-muted-foreground text-sm">
+															USD
+														</div>
 														{convertErrors.amount && (
 															<p
 																id={`${uid}-convert-amount-error`}
