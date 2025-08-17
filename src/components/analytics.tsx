@@ -11,8 +11,10 @@ import {
 	TrendingUp,
 	Users,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Kbd } from "@/components/ui/kbd";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useShortcutsEnabled } from "@/domain/infra/store";
 import type { Lead, Opportunity } from "@/domain/models";
 import { LEAD_STATUSES, OPPORTUNITY_STAGES } from "@/domain/models/constants";
 import { dateUtils } from "@/helpers/date";
@@ -37,6 +39,45 @@ export function Analytics({
 	loading = false,
 }: AnalyticsProps) {
 	const [activeTab, setActiveTab] = useState<TabType>("overview");
+	const shortcutsEnabled = useShortcutsEnabled();
+
+	useEffect(() => {
+		if (!shortcutsEnabled) return;
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.ctrlKey || e.metaKey) {
+				switch (e.key) {
+					case "1":
+						e.preventDefault();
+						setActiveTab("overview");
+						break;
+					case "2":
+						e.preventDefault();
+						setActiveTab("leads");
+						break;
+					case "3":
+						e.preventDefault();
+						setActiveTab("opportunities");
+						break;
+					case "4":
+						e.preventDefault();
+						setActiveTab("conversion");
+						break;
+					case "5":
+						e.preventDefault();
+						setActiveTab("pipeline");
+						break;
+					case "6":
+						e.preventDefault();
+						setActiveTab("timeline");
+						break;
+				}
+			}
+		};
+
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, [shortcutsEnabled]);
 
 	const stats = useMemo(() => {
 		const safeLeads = Array.isArray(leads) ? leads : [];
@@ -629,26 +670,43 @@ export function Analytics({
 			</div>
 
 			<div className="border-border border-b">
-				<nav className="flex space-x-8">
-					{tabs.map((tab) => {
-						const Icon = tab.icon;
-						return (
-							<button
-								type="button"
-								key={tab.id}
-								onClick={() => setActiveTab(tab.id as TabType)}
-								className={`flex items-center gap-2 border-b-2 px-1 py-2 font-medium text-sm transition-colors duration-200 ${
-									activeTab === tab.id
-										? "border-primary text-primary"
-										: "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
-								}`}
-							>
-								<Icon className="h-4 w-4" />
-								{tab.label}
-							</button>
-						);
-					})}
-				</nav>
+				{shortcutsEnabled && (
+					<div className="flex items-center justify-between px-6 py-2">
+						<div className="text-muted-foreground text-xs">
+							Use <Kbd>Ctrl</Kbd> + <Kbd>1-6</Kbd> to navigate tabs
+						</div>
+					</div>
+				)}
+				<div className="relative">
+					<div className="scrollbar-hide flex overflow-x-auto">
+						<nav className="flex min-w-full space-x-1 px-1 py-2 sm:space-x-2 md:space-x-4 lg:space-x-8">
+							{tabs.map((tab, index) => {
+								const Icon = tab.icon;
+								return (
+									<button
+										type="button"
+										key={tab.id}
+										onClick={() => setActiveTab(tab.id as TabType)}
+										className={`flex shrink-0 items-center gap-1 border-b-2 px-2 py-2 font-medium text-sm transition-colors duration-200 sm:gap-2 sm:px-3 ${
+											activeTab === tab.id
+												? "border-primary text-primary"
+												: "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
+										}`}
+									>
+										<Icon className="h-4 w-4" />
+										<span className="hidden sm:inline">{tab.label}</span>
+										<span className="sm:hidden">{tab.label.split(" ")[0]}</span>
+										{shortcutsEnabled && (
+											<span className="hidden lg:inline">
+												<Kbd className="ml-1 text-xs">{index + 1}</Kbd>
+											</span>
+										)}
+									</button>
+								);
+							})}
+						</nav>
+					</div>
+				</div>
 			</div>
 
 			<div className="min-h-[600px]">
