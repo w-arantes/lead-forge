@@ -79,7 +79,6 @@ export function StatsCards({
 		},
 	];
 
-	// Add conversion rate calculation
 	const conversionRate =
 		totalLeads > 0 ? Math.round((convertedLeads / totalLeads) * 100) : 0;
 
