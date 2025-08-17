@@ -69,6 +69,7 @@ export function OpportunitiesTable({
 						variant="outline"
 						size="sm"
 						className="gap-2"
+						data-testid="export-button"
 					>
 						<Download className="h-4 w-4" />
 						Export
@@ -77,7 +78,10 @@ export function OpportunitiesTable({
 			</div>
 
 			<div className="overflow-x-auto rounded-lg border">
-				<table className="w-full min-w-[760px]">
+				<table
+					className="w-full min-w-[760px]"
+					data-testid="opportunities-table"
+				>
 					<thead className="bg-muted/50">
 						<tr>
 							<th className="px-4 py-3 text-left font-medium text-sm">Name</th>

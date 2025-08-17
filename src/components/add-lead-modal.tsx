@@ -124,6 +124,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									}
 									aria-invalid={!!errors.name}
 									{...register("name")}
+									data-testid="name-input"
 								/>
 								{errors.name && (
 									<p
@@ -154,6 +155,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									}
 									aria-invalid={!!errors.company}
 									{...register("company")}
+									data-testid="company-input"
 								/>
 								{errors.company && (
 									<p
@@ -184,6 +186,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									}
 									aria-invalid={!!errors.email}
 									{...register("email")}
+									data-testid="email-input"
 								/>
 								{errors.email && (
 									<p
@@ -208,6 +211,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									id={`${uid}-source`}
 									className="w-full rounded-lg border border-input px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
 									{...register("source")}
+									data-testid="source-select"
 								>
 									{Object.values(LEAD_SOURCES).map((source) => (
 										<option key={source} value={source}>
@@ -241,6 +245,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 											shouldValidate: true,
 										})
 									}
+									data-testid="score-input"
 								/>
 								{errors.score && (
 									<p
@@ -265,6 +270,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									id={`${uid}-status`}
 									className="w-full rounded-lg border border-input px-3 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
 									{...register("status")}
+									data-testid="status-select"
 								>
 									{Object.values(LEAD_STATUSES)
 										.filter((status) => status !== LEAD_STATUSES.CONVERTED)
@@ -283,6 +289,7 @@ export function AddLeadModal({ isOpen, onClose, onAdd }: AddLeadModalProps) {
 									disabled={isSubmitting || !isDirty}
 									className="flex-1"
 									aria-describedby="submit-status"
+									data-testid="submit-button"
 								>
 									{isSubmitting ? (
 										<div className="mr-2 h-4 w-4 animate-spin rounded-full border-white border-b-2" />

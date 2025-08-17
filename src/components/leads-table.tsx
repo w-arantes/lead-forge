@@ -179,11 +179,17 @@ export function LeadsTable({
 						variant="outline"
 						size="sm"
 						className="gap-2"
+						data-testid="export-button"
 					>
 						<Download className="h-4 w-4" />
 						Export
 					</Button>
-					<Button onClick={onAddLead} size="sm" className="gap-2">
+					<Button
+						onClick={onAddLead}
+						size="sm"
+						className="gap-2"
+						data-testid="add-lead-button"
+					>
 						<Plus className="h-4 w-4" />
 						Add Lead
 					</Button>
@@ -200,6 +206,7 @@ export function LeadsTable({
 						value={searchTerm}
 						onChange={(e) => handleSearchChange(e.target.value)}
 						className="w-full rounded-lg border bg-background py-2.5 pr-4 pl-10 text-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+						data-testid="search-input"
 					/>
 				</div>
 
@@ -210,6 +217,7 @@ export function LeadsTable({
 							value={statusFilter}
 							onChange={(e) => handleStatusChange(e.target.value)}
 							className="h-10 appearance-none rounded-lg border bg-background pr-8 pl-10 text-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
+							data-testid="status-filter"
 						>
 							{statusOptions.map((status) => (
 								<option key={status} value={status}>
@@ -243,7 +251,7 @@ export function LeadsTable({
 				<LeadsTableSkeleton />
 			) : (
 				<div className="overflow-x-auto rounded-xl border bg-card">
-					<table className="w-full min-w-[920px]">
+					<table className="w-full min-w-[920px]" data-testid="leads-table">
 						<thead className="bg-muted/30">
 							<tr>
 								<th className="px-6 py-4 text-left font-medium text-foreground text-sm">
