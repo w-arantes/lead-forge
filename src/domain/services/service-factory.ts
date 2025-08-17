@@ -1,7 +1,6 @@
-import { LeadUseCases } from "@/domain/usecases";
-import { OpportunityUseCases } from "@/domain/usecases";
 import { LeadRepositoryImpl } from "@/domain/repositories/lead-repository-impl";
 import { OpportunityRepositoryImpl } from "@/domain/repositories/opportunity-repository-impl";
+import { LeadUseCases, OpportunityUseCases } from "@/domain/usecases";
 
 // Service factory following dependency injection principles
 export class ServiceFactory {
