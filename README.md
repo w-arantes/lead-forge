@@ -201,65 +201,80 @@ interface Opportunity {
 
 ## 🧪 Testing
 
-### **Current Status** ⚠️ **Testing Gap Identified**
+### **Current Status** ✅ **E2E Testing Implemented**
 
-**Testing Coverage**: 0% (No tests currently implemented)
+**Testing Coverage**: E2E tests covering all critical user workflows
 **Priority**: High - Critical for production readiness
 
 ### **Testing Strategy**
 
-#### **Unit Testing (Planned)**
-- **Domain Layer**: Models, schemas, validation
-- **Store Logic**: Zustand actions and state management
-- **Utility Functions**: Helper functions and utilities
-- **Component Logic**: Business logic within components
+Our testing approach focuses on **End-to-End (E2E) testing** using Playwright to ensure complete user workflows function correctly across all browsers and devices.
 
-#### **Integration Testing (Planned)**
-- **Component Interaction**: Form submission flows
-- **Data Flow**: Store updates and persistence
-- **API Integration**: Data seeding and export functionality
+### **E2E Testing Stack** ⭐ **Implemented**
 
-#### **E2E Testing (Planned)**
-- **Critical User Journeys**: Lead management workflow
-- **Opportunity Conversion**: Complete conversion flow
-- **Data Export**: CSV generation and download
-- **Responsive Design**: Mobile and desktop interactions
+- **Framework**: Playwright (cross-browser testing with excellent debugging)
+- **Coverage**: Complete user journeys and critical business flows
+- **Browsers**: Chromium, Firefox, WebKit, Mobile Chrome
+- **Features**: Screenshots on failure, traces for debugging, responsive testing
 
-### **Recommended Testing Stack**
+### **Test Coverage** ✅ **Implemented**
 
-#### **Unit & Integration**
-- **Vitest**: Fast unit testing with React Testing Library
-- **React Testing Library**: Component testing with user-centric approach
-- **MSW**: API mocking for consistent test behavior
+#### **Lead Management**
+- ✅ Display leads table with initial data
+- ✅ Add new lead successfully
+- ✅ Edit lead inline
+- ✅ Convert lead to opportunity
+- ✅ Filter leads by status
+- ✅ Search leads by name
+- ✅ Export leads to CSV
 
-#### **E2E Testing** ⭐ **Recommended: Playwright**
-- **Cross-browser**: Chromium, Firefox, WebKit
-- **Fast & Reliable**: Built-in auto-waiting and retry mechanisms
-- **Excellent Debugging**: Trace viewer and step-by-step debugging
-- **Mobile Testing**: Responsive design validation
+#### **Opportunities Management**
+- ✅ Display opportunities table
+- ✅ View opportunity details
+- ✅ Update opportunity stage
+- ✅ Update opportunity amount
+- ✅ Filter opportunities by stage
+- ✅ Search opportunities by name
+- ✅ Export opportunities to CSV
 
-### **Testing Implementation Plan**
+#### **Dashboard & Navigation**
+- ✅ Load dashboard with all tabs
+- ✅ Navigate between tabs
+- ✅ Display stats cards
+- ✅ Toggle theme
+- ✅ Handle responsive design
+- ✅ Persist theme preference
+- ✅ Display header with logo
+- ✅ Handle data loading states
 
-#### **Phase 1: Foundation (Week 1-2)**
-- Setup Vitest and React Testing Library
-- Core unit tests for domain models and schemas
-- Store action testing
+### **Running Tests**
 
-#### **Phase 2: Component Testing (Week 3-4)**
-- Component unit tests with mock data
-- Form validation testing
-- Integration tests for component interactions
+```bash
+# Run all E2E tests
+yarn test:e2e
 
-#### **Phase 3: E2E Testing (Week 5-6)**
-- Playwright setup and configuration
-- Critical path testing
-- Cross-browser validation
+# Run tests with UI mode (interactive)
+yarn test:e2e:ui
 
-### **Coverage Targets**
-- **Minimum Coverage**: 80% (statements, branches, functions, lines)
-- **Critical Paths**: 100% coverage required
-- **Component Testing**: All interactive components
-- **E2E Testing**: All critical user journeys
+# Run tests in headed mode (see browser)
+yarn test:e2e:headed
+
+# Run tests in debug mode
+yarn test:e2e:debug
+```
+
+### **Test Reports**
+
+After running tests, HTML reports are generated:
+```bash
+npx playwright show-report
+```
+
+### **Future Testing Plans**
+
+- **Unit Tests**: Add Vitest for business logic testing
+- **Integration Tests**: Component interaction testing
+- **Performance Tests**: Load testing and optimization
 
 ## 🛠️ Development
 
@@ -284,11 +299,11 @@ yarn biome:check      # Biome linting
 yarn biome:format     # Biome formatting
 yarn biome:fix        # Biome auto-fix
 
-# Testing (Planned)
-yarn test             # Run unit tests
-yarn test:watch       # Run tests in watch mode
-yarn test:coverage    # Generate coverage report
+# Testing
 yarn test:e2e         # Run E2E tests with Playwright
+yarn test:e2e:ui      # Run tests with interactive UI
+yarn test:e2e:headed  # Run tests in headed mode
+yarn test:e2e:debug   # Run tests in debug mode
 ```
 
 ### Code Style
