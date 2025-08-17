@@ -43,10 +43,7 @@ export class LeadRepositoryImpl implements LeadRepository {
 				lastContacted: new Date().toISOString(),
 			};
 
-			const leads = storage.getLeads();
-			leads.push(newLead);
-			storage.setLeads(leads);
-
+			// Don't update storage here - let the store handle it
 			return newLead;
 		} catch (error) {
 			throw new Error(
@@ -67,8 +64,7 @@ export class LeadRepositoryImpl implements LeadRepository {
 			}
 
 			leads[leadIndex] = { ...leads[leadIndex], ...data };
-			storage.setLeads(leads);
-
+			// Don't update storage here - let the store handle it
 			return leads[leadIndex];
 		} catch (error) {
 			throw new Error(
