@@ -85,7 +85,13 @@ export function createLeadFilter(
  * Helper function to check if filters are empty (only contain defaults)
  */
 export function isEmptyFilter(filters: LeadFilterInput): boolean {
-	const { page, limit, sortBy, sortOrder, ...otherFilters } = filters;
+	const {
+		page: _,
+		limit: __,
+		sortBy: ___,
+		sortOrder: ____,
+		...otherFilters
+	} = filters;
 	const hasNonDefaultFilters = Object.values(otherFilters).some(
 		(value) => value !== undefined && value !== null && value !== "",
 	);
