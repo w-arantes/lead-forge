@@ -75,6 +75,7 @@ export function Toast({
 			role="alert"
 			aria-live="polite"
 			aria-atomic="true"
+			data-testid={`toast-${type}`}
 		>
 			<div className="flex items-start gap-3">
 				<Icon className="mt-0.5 h-5 w-5 flex-shrink-0" />
