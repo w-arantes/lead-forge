@@ -76,7 +76,7 @@ export function DashboardTabs({
 						aria-selected={active === tab.id}
 						aria-controls={idPrefix ? `${idPrefix}-panel-${tab.id}` : undefined}
 						className={cn(
-							"border-b-2 px-1 py-4 font-medium text-sm transition-colors",
+							"cursor-pointer border-b-2 px-1 py-4 font-medium text-sm transition-colors",
 							active === tab.id
 								? "border-primary text-primary"
 								: "border-transparent text-muted-foreground hover:border-border hover:text-foreground",
