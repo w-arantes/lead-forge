@@ -125,7 +125,7 @@ export function StatsCards({
 								aria-label={
 									stat.filter ? `${stat.name} — filter list` : stat.name
 								}
-								className={`group hover-lift relative rounded-xl border bg-card p-6 ${
+								className={`group hover-lift relative rounded-xl border bg-card p-6 text-left ${
 									stat.filter
 										? "hover-scale cursor-pointer ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
 										: ""
@@ -135,8 +135,8 @@ export function StatsCards({
 								}
 								data-testid={stat.name.toLowerCase().replace(/\s+/g, "-")}
 							>
-								<div className="flex items-center justify-between">
-									<div>
+								<div className="relative">
+									<div className="text-left">
 										<p className="mb-1 font-medium text-muted-foreground text-sm">
 											{stat.name}
 										</p>
@@ -147,8 +147,10 @@ export function StatsCards({
 											{stat.description}
 										</p>
 									</div>
-									<div className={`rounded-lg p-3 ${stat.color}`}>
-										<stat.icon className="h-6 w-6" />
+									<div
+										className={`absolute top-0 right-0 rounded-lg p-3 ${stat.color}`}
+									>
+										<stat.icon className="size-6" />
 									</div>
 								</div>
 
@@ -166,7 +168,7 @@ export function StatsCards({
 				className="hover-lift hover-scale rounded-xl border border-primary/20 bg-gradient-to-r from-primary/10 to-primary/5 p-6"
 				data-testid="total-value"
 			>
-				<div className="flex items-center justify-between">
+				<div className="relative">
 					<div>
 						<h3 className="font-semibold text-lg dark:text-white">
 							Pipeline Value
@@ -178,8 +180,8 @@ export function StatsCards({
 							Total value of all opportunities
 						</p>
 					</div>
-					<div className="rounded-lg bg-primary/10 p-4">
-						<DollarSign className="h-8 w-8 text-primary" />
+					<div className="absolute top-0 right-0 rounded-lg bg-primary/10 p-3">
+						<DollarSign className="size-6" />
 					</div>
 				</div>
 			</div>
@@ -189,7 +191,7 @@ export function StatsCards({
 				className="hover-lift hover-scale rounded-xl border border-green-200 bg-gradient-to-r from-green-50 to-green-100 p-6"
 				data-testid="conversion-rate"
 			>
-				<div className="flex items-center justify-between">
+				<div className="relative">
 					<div>
 						<h3 className="font-semibold text-green-800 text-lg">
 							Conversion Rate
@@ -201,8 +203,8 @@ export function StatsCards({
 							Leads converted to opportunities
 						</p>
 					</div>
-					<div className="rounded-lg bg-green-200 p-4">
-						<Target className="h-8 w-8 text-green-600" />
+					<div className="absolute top-0 right-0 rounded-lg bg-green-200 p-3">
+						<Target className="size-6" />
 					</div>
 				</div>
 			</div>
