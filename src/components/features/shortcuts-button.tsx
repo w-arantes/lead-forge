@@ -19,10 +19,6 @@ export function ShortcutsButton() {
 	}, []);
 
 	const handleClick = () => {
-		console.log(
-			"Shortcuts button clicked, setting isOpen to:",
-			!isShortcutsOpen,
-		);
 		setIsShortcutsOpen(!isShortcutsOpen);
 	};
 
@@ -44,7 +40,6 @@ export function ShortcutsButton() {
 			<ShortcutsDialog
 				isOpen={isShortcutsOpen}
 				onClose={() => {
-					console.log("Closing shortcuts dialog");
 					setIsShortcutsOpen(false);
 				}}
 			/>

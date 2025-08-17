@@ -12,7 +12,6 @@ export function TableSkeleton({
 	columns = 6,
 	className,
 }: TableSkeletonProps) {
-	// Stable keys for columns and rows to avoid using indexes as keys
 	const columnsKeysRef = useRef<string[] | null>(null);
 	const rowKeysRef = useRef<string[] | null>(null);
 
@@ -73,7 +72,6 @@ export function TableSkeleton({
 	);
 }
 
-// Specific skeleton for leads table
 export function LeadsTableSkeleton() {
 	return (
 		<div className="overflow-hidden rounded-lg border bg-card">
@@ -96,7 +94,6 @@ export function LeadsTableSkeleton() {
 	);
 }
 
-// Specific skeleton for opportunities table
 export function OpportunitiesTableSkeleton() {
 	return (
 		<div className="overflow-hidden rounded-lg border bg-card">

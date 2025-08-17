@@ -170,11 +170,15 @@ export function Dashboard() {
 
 	return (
 		<div className="min-h-screen animate-fadeIn bg-background">
-			<Header
-				title="Lead Forge"
-				rightSlot={<ThemeToggle />}
-				isHidden={isHeaderHidden}
-			/>
+			<Header isHidden={isHeaderHidden}>
+				<Header.Left>
+					<Header.Title>Lead Forge</Header.Title>
+					<Header.Logo />
+				</Header.Left>
+				<Header.RightSlot>
+					<ThemeToggle />
+				</Header.RightSlot>
+			</Header>
 
 			<main className="mx-auto max-w-7xl px-4 pt-28 pb-12 sm:px-6 lg:px-8">
 				{loading ? (
