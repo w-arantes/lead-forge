@@ -1,4 +1,3 @@
-// Lead Sources
 export const LEAD_SOURCES = {
 	WEBSITE: "Website",
 	LINKEDIN: "LinkedIn",
@@ -9,7 +8,6 @@ export const LEAD_SOURCES = {
 
 export type LeadSource = (typeof LEAD_SOURCES)[keyof typeof LEAD_SOURCES];
 
-// Lead Statuses
 export const LEAD_STATUSES = {
 	NEW: "New",
 	QUALIFIED: "Qualified",
@@ -19,7 +17,6 @@ export const LEAD_STATUSES = {
 
 export type LeadStatus = (typeof LEAD_STATUSES)[keyof typeof LEAD_STATUSES];
 
-// Opportunity Stages
 export const OPPORTUNITY_STAGES = {
 	PROSPECTING: "Prospecting",
 	QUALIFICATION: "Qualification",
@@ -32,7 +29,6 @@ export const OPPORTUNITY_STAGES = {
 export type OpportunityStage =
 	(typeof OPPORTUNITY_STAGES)[keyof typeof OPPORTUNITY_STAGES];
 
-// Arrays for backward compatibility and form options
 export const LEAD_SOURCES_ARRAY: LeadSource[] = Object.values(LEAD_SOURCES);
 export const LEAD_STATUSES_ARRAY: LeadStatus[] = Object.values(LEAD_STATUSES);
 export const OPPORTUNITY_STAGES_ARRAY: OpportunityStage[] =

@@ -8,9 +8,9 @@ export interface Lead {
 	source: LeadSource;
 	score: number;
 	status: LeadStatus;
-	createdAt: string; // ISO date string
-	lastContacted?: string; // ISO date string
-	convertedAt?: string; // ISO date string when converted
+	createdAt: string;
+	lastContacted?: string;
+	convertedAt?: string;
 }
 
 export interface LeadFilters {
@@ -27,7 +27,7 @@ export interface CreateLeadRequest {
 	source: LeadSource;
 	score: number;
 	status: LeadStatus;
-	createdAt?: string; // Optional, will be set automatically if not provided
+	createdAt?: string;
 }
 
 export interface UpdateLeadRequest {
