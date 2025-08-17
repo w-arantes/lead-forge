@@ -206,8 +206,6 @@ interface Opportunity {
 **Testing Coverage**: 0% (No tests currently implemented)
 **Priority**: High - Critical for production readiness
 
-> 📖 **For comprehensive testing details, see [TESTING_STRATEGY.md](./TESTING_STRATEGY.md)**
-
 ### **Testing Strategy**
 
 #### **Unit Testing (Planned)**

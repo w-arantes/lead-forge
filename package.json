@@ -8,6 +8,7 @@
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"preview": "vite preview",
+		"prepare": "husky",
 		"biome:check": "biome check src/",
 		"biome:lint": "biome lint src/",
 		"biome:format": "biome format src/",
