@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .lead-forge-icon { fill: #087F5B; }
+    </style>
+  </defs>
+  <rect class="lead-forge-icon" x="2" y="2" width="12" height="12" rx="2"/>
+  <text x="8" y="10" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="white">LF</text>
+</svg>

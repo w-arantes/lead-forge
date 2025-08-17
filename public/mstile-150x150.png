@@ -1,0 +1,22 @@
+# Placeholder for mstile-150x150.png
+# 
+# This file should contain a 150x150 PNG image for Windows tile support
+# 
+# Requirements:
+# - Dimensions: 150x150 pixels
+# - Format: PNG
+# - Background: Transparent or #087F5B (brand color)
+# - Content: Lead Forge logo/icon
+# 
+# To generate this file:
+# 1. Create a 150x150 PNG image with your logo
+# 2. Replace this placeholder file
+# 3. Ensure the image follows Windows tile design guidelines
+# 
+# Note: This file is referenced in browserconfig.xml for Windows tile support
+# 
+# Windows Tile Design Guidelines:
+# - Keep important elements within the center 66x66 pixel area
+# - Use transparent background for better integration
+# - Ensure good contrast with Windows themes
+# - Test on both light and dark Windows themes
