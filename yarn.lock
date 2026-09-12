@@ -1820,9 +1820,9 @@ yaml@^2.7.0:
   integrity sha512-lcYcMxX2PO9XMGvAJkJ3OsNMw+/7FKes7/hgerGUYWIoWu5j/+YQqcZr5JnPZWzOsEBgMbSbiSTn/dv/69Mkpw==
 
 zod@^4.0.17:
-  version "4.0.17"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-4.0.17.tgz#95931170715f73f7426c385c237b7477750d6c8d"
-  integrity sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ==
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.6.2.tgz#91b2ce79ec994eaa42675499166587d3d223c961"
+  integrity sha512-lh5RCAGFa1Cm2hjtNwLQhSs/AsqdWnTQaBER9fEwN/88pSh7KOtJavtBx/0VlkN/uFd61SwYmljLMDAsHlvzBQ==
 
 zustand@^5.0.7:
   version "5.0.7"
